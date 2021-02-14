@@ -16,6 +16,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file   bams.h
+ * @brief  Binary Array MultiSet C API.
+ * @author Ioulianos Kakoulidis
+ */
+ 
 #ifndef BAMS_H
 #define BAMS_H
 
@@ -25,15 +31,60 @@ extern "C" {
 
 typedef struct _BAMS BAMS;
 
+/**
+ * @brief Create BAM set.
+ *
+ * @param key_size    Key size      
+ * @param compare     Compare function
+ *
+ */
 BAMS * bams_create(size_t key_size,
                    int (*compare)(const void *, const void *));
 
+/**
+ * Check if set contains given key
+ *
+ *
+ *   
+ *
+ */
 int bams_contains(const BAMS *set, const void *key);
 
+/**
+ * @brief Insert key into set.
+ *
+ *
+ *   
+ *
+ */
 int bams_insert(BAMS *set, const void *key);
 
+/**
+ * @brief Return minimum key of the set.
+ *
+ * @return min such that compare(min, key) <= 0 for any key from the set
+ *         if set is empty - return NULL  
+ */
+void * bams_min(const BAMS *set);
+
+/**
+ * @brief Return maximum key of the set.
+ *
+ * @return max such that compare(max, key) >= 0 for any key from the set
+ *         if set is empty - return NULL  
+ */
+void * bams_max(const BAMS *set);
+
+/**
+ * @brief Count number of keys less than given.  
+ *
+ *
+ *   
+ *
+ */
+size_t bams_count_less(const BAMS *set, const void *key);
+
 /*
-size_t bams_count_less(const void *set, const void *key);
 size_t bams_count_equal(const void *set, const void *key);
 size_t bams_count_great(const void *set, const void *key);
 void * bams_less(const void *set, const void *key, size_t *key_num);
@@ -42,11 +93,42 @@ void * bams_great(const void *set, const void *key, size_t *key_num);
 void * bams_array(const void *set, size_t *key_num);
 */
 
+
+/**
+ * @brief Returns number of keys.
+ *
+ *
+ *   
+ *
+ */
 size_t bams_get_size(const BAMS *set);
 
+/**
+ * @brief Remove all keys from set.
+ *
+ *
+ *   
+ *
+ */
+void bams_clear(BAMS *set);
+
+/**
+ * @brief Destroy set.
+ *
+ *
+ *   
+ *
+ */
 void bams_free(BAMS *set);
 
-int bams_check_structure(BAMS *set);
+/**
+ * @brief Check set internal structure.
+ *
+ *
+ *   
+ *
+ */
+int bams_check_structure(const BAMS *set);
 
 #ifdef __cplusplus
 }

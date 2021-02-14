@@ -16,33 +16,39 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file merge.c
+ * @brief Merge two sorted arrays.
+ * @author Ioulianos Kakoulidis
+ */
+
 #include <stdlib.h>
 #include <string.h>
 
-void * merge(const void *a, const void *b,
-             size_t len_a, size_t len_b,
-             size_t key_size, int (*compare)(const void *, const void *))
+void * merge(const void *arr_a, size_t num_el_a,
+             const void *arr_b, size_t num_el_b,
+             size_t el_size, int (*compare)(const void *, const void *))
 {
-    char *ac = (char *)a;
-    char *bc = (char *)b;
-    char *ah = ac + (len_a * key_size);
-    char *bh = bc + (len_b * key_size);
-    char *r = (char *)malloc((len_a + len_b) * key_size);
+    char *ac = (char *)arr_a;
+    char *bc = (char *)arr_b;
+    char *ah = ac + (num_el_a * el_size);
+    char *bh = bc + (num_el_b * el_size);
+    char *r = (char *)malloc((num_el_a + num_el_b) * el_size);
     char *rc = r;
 
     while ((ac < ah) && (bc < bh))
     {
         if ((*compare)(ac, bc) > 0)
         {
-            memcpy(rc, bc, key_size);
-            bc += key_size;
+            memcpy(rc, bc, el_size);
+            bc += el_size;
         }
         else
         {
-            memcpy(rc, ac, key_size);
-            ac += key_size;
+            memcpy(rc, ac, el_size);
+            ac += el_size;
         }
-        rc += key_size;
+        rc += el_size;
     }
 
     if (ac < ah)

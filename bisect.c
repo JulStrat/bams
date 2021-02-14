@@ -16,14 +16,20 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file bisect.c
+ * @brief Array bisection functions.
+ * @author Ioulianos Kakoulidis
+ */
+
 #include <stddef.h>
 
-void * bisect_left(const void *key, const void *a, 
-                   size_t len, size_t key_size,
+void * bisect_left(const void *key, const void *arr,
+                   size_t el_num, size_t el_size,
                    int (*compare)(const void *, const void *))
 {
     size_t low = 0;
-    size_t high = len;
+    size_t high = el_num;
     size_t mid;
     int t;
     char *off = NULL;
@@ -31,7 +37,7 @@ void * bisect_left(const void *key, const void *a,
     while (low < high)
     {
         mid = low + ((high - low) >> 1);
-        off = (char *)a + mid * key_size;
+        off = (char *)arr + mid * el_size;
         t = (*compare)(key, off);
         if (t > 0)
         {
@@ -43,16 +49,44 @@ void * bisect_left(const void *key, const void *a,
         }
     }
 
-    return (char *)a + low * key_size;;
+    return (char *)arr + low * el_size;
 }
 
-void * bin_search(const void *key, const void *base,
-                  size_t elnum, size_t elsize,
-                  int (*compare) (const void *, const void *))
+void * bisect_right(const void *key, const void *arr,
+                   size_t el_num, size_t el_size,
+                   int (*compare)(const void *, const void *))
 {
-    char *off = (char *)bisect_left(key, base, elnum, elsize, compare);
+    size_t low = 0;
+    size_t high = el_num;
+    size_t mid;
+    int t;
+    char *off = NULL;
+    
+    while (low < high)
+    {
+        mid = low + ((high - low) >> 1);
+        off = (char *)arr + mid * el_size;
+        t = (*compare)(key, off);
+        if (t < 0)
+        {
+            high = mid;
+        }
+        else
+        {
+            low = mid + 1;
+        }
+    }
 
-    if ((off - (char *)base) == elnum * elsize)
+    return (char *)arr + low * el_size;
+}
+
+void * bin_search(const void *key, const void *arr,
+                  size_t el_num, size_t el_size,
+                  int (*compare)(const void *, const void *))
+{
+    char *off = (char *)bisect_left(key, arr, el_num, el_size, compare);
+
+    if ((off - (char *)arr) == el_num * el_size)
     {
         return NULL;
     }
@@ -62,12 +96,3 @@ void * bin_search(const void *key, const void *base,
     }
     return NULL;
 }
-
-
-/*
-void * bisect_right(const void *a, const void *key,
-                   size_t len, size_t key_size,
-                   int (*compare)(const void *, const void *))
-{
-}
-*/

@@ -16,6 +16,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file   merge.h
+ * @brief  Merge two sorted arrays.
+ * @author Ioulianos Kakoulidis
+ */
+
 #ifndef MERGE_H
 #define MERGE_H
 
@@ -23,9 +29,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 extern "C" {
 #endif
 
-void * merge(const void *a, const void *b,
-             size_t len_a, size_t len_b,
-             size_t key_size, int (*compare)(const void *, const void *));
+void * merge(const void *arr_a, size_t num_el_a,
+             const void *arr_b, size_t num_el_b,
+             size_t el_size, int (*compare)(const void *, const void *));
 
 #ifdef __cplusplus
 }

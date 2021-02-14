@@ -16,6 +16,13 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file bams.c
+ * @brief Binary Array MultiSet C API implementation.
+ * Implementation of the functions declared in the C header file bams.h
+ * @author Ioulianos Kakoulidis
+ */
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -100,7 +107,8 @@ int bams_insert(BAMS *set, const void *key)
         if (length == (curr->length))
         {
             next = curr->next;
-            t = merge(keys, curr->keys, length, length, set->key_size, set->compare);
+            t = merge(keys, length, curr->keys, length,
+                      set->key_size, set->compare);
             length *= 2;
             free(keys);
             free_node(curr);
@@ -117,9 +125,86 @@ int bams_insert(BAMS *set, const void *key)
     return 1;
 }
 
+void * bams_min(const BAMS *set)
+{
+    void *min_key = NULL;
+    SET_NODE *curr = set->head;
+
+    if (set->size > 0)
+    {
+        min_key = curr->keys;
+        while (NULL != curr->next)
+        {
+            curr = curr->next;
+            if ((*(set->compare))(min_key, curr->keys) > 0)
+            {
+                min_key = curr->keys;
+            }
+        }
+    }
+
+    return min_key;
+}
+
+void * bams_max(const BAMS *set)
+{
+    char *max_key = NULL;
+    SET_NODE *curr = set->head;
+    char *last = NULL;
+
+    if (set->size > 0)
+    {
+        max_key = (char *)curr->keys + (curr->length - 1) * set->key_size;
+        while (NULL != curr->next)
+        {
+            curr = curr->next;
+            last = (char *)curr->keys + (curr->length - 1) * set->key_size;
+            if ((*(set->compare))(last, max_key) > 0)
+            {
+                max_key = last;
+            }
+        }
+    }
+
+    return max_key;
+}
+
+size_t bams_count_less(const BAMS *set, const void *key)
+{
+    SET_NODE *curr = set->head;
+    char *off;
+    size_t less = 0;
+
+    while (NULL != curr)
+    {
+        off = (char *)bisect_left(key, curr->keys, curr->length,
+                                  set->key_size, set->compare);
+        less += off - (char *)curr->keys;
+        curr = curr->next;
+    }
+
+    return (size_t) less / set->key_size;
+}
+
 size_t bams_get_size(const BAMS *set)
 {
     return set->size;
+}
+
+void bams_clear(BAMS *set)
+{
+    SET_NODE *curr = set->head;
+    SET_NODE *next;
+
+    while (NULL != curr)
+    {
+        next = curr->next;
+        free(curr->keys);
+        free(curr);
+        curr = next;
+    }
+    set->head = NULL;
+    set->size = 0;
 }
 
 void bams_free(BAMS *set)
@@ -134,11 +219,10 @@ void bams_free(BAMS *set)
         free(curr);
         curr = next;
     }
-
     free(set);
 }
 
-int bams_check_structure(BAMS *set)
+int bams_check_structure(const BAMS *set)
 {
     SET_NODE *curr = set->head;
     char *off;
@@ -190,7 +274,7 @@ int bams_check_structure(BAMS *set)
 /* Internal functions */
 static inline SET_NODE * create_node(void *keys, size_t length)
 {
-    SET_NODE *node = malloc(sizeof (SET_NODE));
+    SET_NODE *node = (SET_NODE *)malloc(sizeof (SET_NODE));
 
     if (NULL != node)
     {

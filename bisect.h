@@ -16,6 +16,12 @@ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
+/**
+ * @file   bisect.h
+ * @brief  Array bisection functions.
+ * @author Ioulianos Kakoulidis
+ */
+
 #ifndef BISECT_H
 #define BISECT_H
 
@@ -23,18 +29,34 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 extern "C" {
 #endif
 
-void * bisect_left(const void *key, const void *a,
-                   size_t len, size_t key_size,
+/**
+ * @brief Find position of the first element equal or great
+ *        than given key in sorted in ascending order array. 
+ *        If not found, return ``end'' of array.
+ *
+ */
+void * bisect_left(const void *key, const void *arr,
+                   size_t el_num, size_t el_size,
                    int (*compare)(const void *, const void *));
 
-/*
-void * bisect_right(const void *a, const void *key,
-                   size_t len, size_t key_size,
-                   int (*compare)(const void *, const void *))
-*/
+/**
+ * @brief Find position of the first element great
+ *        than given key in sorted in ascending order array. 
+ *        If not found, return ``end'' of array.
+ *
+ */
+void * bisect_right(const void *key, const void *arr,
+                   size_t el_num, size_t el_size,
+                   int (*compare)(const void *, const void *));
 
-void * bin_search(const void *key, const void *base,
-                  size_t elnum, size_t elsize,
+/**
+ * @brief Find position of the first element equal 
+ *        to given key in sorted in ascending order array. 
+ *        If not found, return NULL.
+ *
+ */
+void * bin_search(const void *key, const void *arr,
+                  size_t el_num, size_t el_size,
                   int (*compare)(const void *, const void *));
 
 #ifdef __cplusplus

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
+#include <assert.h>
 
 #include "bams.h"
 
@@ -19,12 +21,22 @@ int arint[ARR_SZ] = {0};
 
 int main(int argc, char *argv[])
 {   int a, b, i;
+    int min_key = INT_MAX, max_key = INT_MIN;
     BAMS *bas;
-
+	size_t less = 0;
+	
     srand(time(NULL));
     for (i = 0; i < ARR_SZ; i++)
     {   
         arint[i] = rand();
+        if (arint[i] < min_key)
+        {
+        	min_key = arint[i];
+		}
+		if (arint[i] > max_key)
+		{
+			max_key = arint[i];
+		}
     }
 
     bas = bams_create(sizeof (int), cmp_int);
@@ -42,7 +54,20 @@ int main(int argc, char *argv[])
            break;
         };
     }
+
+	a = arint[0];
+    for (i = 0; i < ARR_SZ; i++)
+    {   
+        if (arint[i] < a)
+        {
+        	less++;
+		}
+    }
+    printf("Less: %d %d %d\n", less, bams_count_less(bas, &a), a);
     
+    printf("Min key: %d, expected: %d\n", *(int *)bams_min(bas), min_key);
+    printf("Max key: %d, expected: %d\n", *(int *)bams_max(bas), max_key);
+
     printf("Set size: %d\n", bams_get_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
     bams_free(bas);
