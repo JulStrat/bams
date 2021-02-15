@@ -84,9 +84,24 @@ void * bams_max(const BAMS *set);
  */
 size_t bams_count_less(const BAMS *set, const void *key);
 
+/**
+ * @brief Count number of keys equal to given.  
+ *
+ *
+ *   
+ *
+ */
+size_t bams_count_equal(const BAMS *set, const void *key);
+
+/**
+ * @brief Count number of keys great than given.  
+ *
+ *
+ *   
+ *
+ */
+size_t bams_count_great(const BAMS *set, const void *key);
 /*
-size_t bams_count_equal(const void *set, const void *key);
-size_t bams_count_great(const void *set, const void *key);
 void * bams_less(const void *set, const void *key, size_t *key_num);
 void * bams_equal(const void *set, const void *key, size_t *key_num);
 void * bams_great(const void *set, const void *key, size_t *key_num);

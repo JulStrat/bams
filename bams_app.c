@@ -24,6 +24,8 @@ int main(int argc, char *argv[])
     int min_key = INT_MAX, max_key = INT_MIN;
     BAMS *bas;
 	size_t less = 0;
+	size_t equal = 0;	
+	size_t great = 0;	
 	
     srand(time(NULL));
     for (i = 0; i < ARR_SZ; i++)
@@ -62,10 +64,28 @@ int main(int argc, char *argv[])
         {
         	less++;
 		}
+		else if (arint[i] > a)
+		{
+			great++;
+		}
+		else
+		{
+			equal++;
+		}
     }
-    printf("Less: %d %d %d\n", less, bams_count_less(bas, &a), a);
+	assert(less == bams_count_less(bas, &a));
+    printf("Less than %d: Expected %d, %d\n", a, less, bams_count_less(bas, &a));
+	
+	assert(equal == bams_count_equal(bas, &a));	
+    printf("Equal to %d: Expected %d, %d\n", a, equal, bams_count_equal(bas, &a));	
+	
+	assert(great == bams_count_great(bas, &a));		
+    printf("Great than %d: Expected %d, %d\n", a, great, bams_count_great(bas, &a));	
     
+	assert(*(int *)bams_min(bas) == min_key);
     printf("Min key: %d, expected: %d\n", *(int *)bams_min(bas), min_key);
+	
+	assert(*(int *)bams_max(bas) == max_key);	
     printf("Max key: %d, expected: %d\n", *(int *)bams_max(bas), max_key);
 
     printf("Set size: %d\n", bams_get_size(bas));

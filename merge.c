@@ -17,8 +17,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 /**
- * @file merge.c
- * @brief Merge two sorted arrays.
+ * @file   merge.c
+ * @brief  Merge two sorted arrays.
  * @author Ioulianos Kakoulidis
  */
 

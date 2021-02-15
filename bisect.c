@@ -17,8 +17,9 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 /**
- * @file bisect.c
- * @brief Array bisection functions.
+ * @file   bisect.c
+ * @brief  Array bisection functions.
+ *         Binary search algorithm.
  * @author Ioulianos Kakoulidis
  */
 
@@ -53,8 +54,8 @@ void * bisect_left(const void *key, const void *arr,
 }
 
 void * bisect_right(const void *key, const void *arr,
-                   size_t el_num, size_t el_size,
-                   int (*compare)(const void *, const void *))
+                    size_t el_num, size_t el_size,
+                    int (*compare)(const void *, const void *))
 {
     size_t low = 0;
     size_t high = el_num;
@@ -88,9 +89,10 @@ void * bin_search(const void *key, const void *arr,
 
     if ((off - (char *)arr) == el_num * el_size)
     {
+        // At the ``end'' of array
         return NULL;
     }
-    if (0 == (*compare)(key, off))
+    if ((*compare)(key, off) == 0)
     {
         return off;
     }

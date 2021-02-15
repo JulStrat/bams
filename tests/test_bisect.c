@@ -32,6 +32,11 @@ int main(int argc, char *argv[])
     pos = bisect_right(&key, &arr_a[0], 0, sizeof (int), cmp_int);
     assert(pos == &arr_a[0]);
 
+    key = 11;
+    pos = NULL;
+    pos = bin_search(&key, &arr_a[0], 0, sizeof (int), cmp_int);
+    assert(!pos);
+
     printf("Test bisect_left\n");
     // int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
     key = -21;
@@ -95,6 +100,38 @@ int main(int argc, char *argv[])
     pos = NULL;
     pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
     assert((pos - &arr_a[0]) == 7);
+
+    printf("Test bin_search\n");
+    // int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
+    key = -22;
+    pos = 12;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(!pos);
+
+    key = -3;
+    pos = 13;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(pos == &arr_a[0]);
+
+    key = 11;
+    pos = NULL;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(pos == &arr_a[2]);
+
+    key = 12;
+    pos = 14;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(!pos);
+
+    key = 200;
+    pos = NULL;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(pos == &arr_a[6]);
+
+    key = 300;
+    pos = 17;
+    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
+    assert(!pos);
 
     printf("All tests passed.\n");
     return EXIT_SUCCESS;

@@ -19,6 +19,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 /**
  * @file   bisect.h
  * @brief  Array bisection functions.
+ *         Binary search algorithm.
  * @author Ioulianos Kakoulidis
  */
 
@@ -46,8 +47,8 @@ void * bisect_left(const void *key, const void *arr,
  *
  */
 void * bisect_right(const void *key, const void *arr,
-                   size_t el_num, size_t el_size,
-                   int (*compare)(const void *, const void *));
+                    size_t el_num, size_t el_size,
+                    int (*compare)(const void *, const void *));
 
 /**
  * @brief Find position of the first element equal 
