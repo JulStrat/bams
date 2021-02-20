@@ -25,6 +25,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #ifndef BAMS_H
 #define BAMS_H
 
+#define BAMS_VERSION "0.1.0"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -101,13 +103,39 @@ size_t bams_count_equal(const BAMS *set, const void *key);
  *
  */
 size_t bams_count_great(const BAMS *set, const void *key);
+
+/**
+ * @brief Return ordered array of keys lass than given.  
+ *
+ *
+ *   
+ *
+ */
+void * bams_less(const BAMS *set, const void *key, size_t *key_num);
+
 /*
-void * bams_less(const void *set, const void *key, size_t *key_num);
-void * bams_equal(const void *set, const void *key, size_t *key_num);
-void * bams_great(const void *set, const void *key, size_t *key_num);
+ * brief Return array of keys equal to given.  
+ *
+ *
+ *   
+ *
+ *
+void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
+ */
+ 
+/**
+ * @brief Return ordered array of keys great than given.  
+ *
+ *
+ *   
+ *
+ */
+void * bams_great(const BAMS *set, const void *key, size_t *key_num);
+
+
+/*
 void * bams_array(const void *set, size_t *key_num);
 */
-
 
 /**
  * @brief Returns number of keys.

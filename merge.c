@@ -33,8 +33,11 @@ void * merge(const void *arr_a, size_t num_el_a,
     char *bc = (char *)arr_b;
     char *ah = ac + (num_el_a * el_size);
     char *bh = bc + (num_el_b * el_size);
-    char *r = (char *)malloc((num_el_a + num_el_b) * el_size);
-    char *rc = r;
+    char *r = NULL;
+    char *rc = NULL;
+
+    r = (char *)malloc((num_el_a + num_el_b) * el_size);
+    rc = r;
 
     while ((ac < ah) && (bc < bh))
     {
@@ -54,7 +57,7 @@ void * merge(const void *arr_a, size_t num_el_a,
     if (ac < ah)
     {
         memcpy(rc, ac, ah - ac);
-    } 
+    }
     else if (bc < bh)
     {
         memcpy(rc, bc, bh - bc);

@@ -25,6 +25,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "bams.h"
 #include "merge.h"
@@ -57,6 +58,7 @@ struct _BAMS
 };
 
 static inline SET_NODE * create_node(void *keys, size_t length);
+static inline SET_NODE * create_node_from_key(void *key, size_t key_size);
 static inline void free_node(SET_NODE *node);
 
 BAMS * bams_create(size_t key_size,
@@ -185,52 +187,117 @@ size_t bams_count_less(const BAMS *set, const void *key)
     {
         off = (char *)bisect_left(key, curr->keys, curr->length,
                                   key_size, set->compare);
+        assert(off >= (char *)curr->keys);
         less += off - (char *)curr->keys;
         curr = curr->next;
     }
 
-    return (size_t) less / key_size;
+    return (size_t)(less / key_size);
 }
 
 size_t bams_count_equal(const BAMS *set, const void *key)
 {
-   SET_NODE *curr = set->head;
-   size_t key_size = set->key_size;
-   char *low;
-   char *high;
-   size_t equal = 0;
+    SET_NODE *curr = set->head;
+    size_t key_size = set->key_size;
+    char *low;
+    char *high;
+    size_t equal = 0;
 
-   while (NULL != curr)
-   {
-       low = (char *)bisect_left(key, curr->keys, curr->length,
-                                 key_size, set->compare);
-       high = (char *)bisect_right(key, curr->keys, curr->length,
-                                   key_size, set->compare);
-       equal += high - low;
-       curr = curr->next;
-   }
+    while (NULL != curr)
+    {
+        low = (char *)bisect_left(key, curr->keys, curr->length,
+                                  key_size, set->compare);
+        high = (char *)bisect_right(key, curr->keys, curr->length,
+                                    key_size, set->compare);
+        assert(high >= low);
+        equal += high - low;
+        curr = curr->next;
+    }
 
-   return (size_t) equal / key_size;
+    return (size_t)(equal / key_size);
 }
 
 size_t bams_count_great(const BAMS *set, const void *key)
 {
-   SET_NODE *curr = set->head;
-   size_t key_size = set->key_size;
-   char *low;
-   char *high;
-   size_t great = 0;
+    SET_NODE *curr = set->head;
+    size_t key_size = set->key_size;
+    char *low;
+    char *high;
+    size_t great = 0;
 
-   while (NULL != curr)
-   {
-       low = (char *)bisect_right(key, curr->keys, curr->length,
+    while (NULL != curr)
+    {
+        low = (char *)bisect_right(key, curr->keys, curr->length,
+                                   key_size, set->compare);
+        high = (char *)curr->keys + curr->length * key_size;
+        assert(high >= low);
+        great += high - low;
+        curr = curr->next;
+    }
+
+    return (size_t)(great / key_size);
+}
+
+void * bams_less(const BAMS *set, const void *key, size_t *key_num)
+{
+    SET_NODE *curr = set->head;
+    size_t key_size = set->key_size;
+    char *off;
+    char *r = NULL;
+    char *t;
+    size_t less = 0;
+
+    *key_num = 0;
+    while (NULL != curr)
+    {
+        off = (char *)bisect_left(key, curr->keys, curr->length,
                                   key_size, set->compare);
-       high = (char *)curr->keys + curr->length * key_size;
-       great += high - low;
-       curr = curr->next;
-   }
+        assert(off >= (char *)curr->keys);
+        less = (size_t)((off - (char *)curr->keys) / key_size);
+        t = merge(r, *key_num, curr->keys, less,
+                  key_size, set->compare);
+        free(r);
+        r = t;
+        *key_num += less;
+        curr = curr->next;
+    }
 
-   return (size_t) great / key_size;
+    return r;
+}
+
+/*
+void * bams_equal(const BAMS *set, const void *key, size_t *key_num)
+{
+}
+*/
+
+void * bams_great(const BAMS *set, const void *key, size_t *key_num)
+{
+    SET_NODE *curr = set->head;
+    size_t key_size = set->key_size;
+    char *low;
+    char *high;
+    char *r = NULL;
+    char *t;
+    size_t great = 0;
+
+    *key_num = 0;
+    while (NULL != curr)
+    {
+        low = (char *)bisect_right(key, curr->keys, curr->length,
+                                   key_size, set->compare);
+        high = (char *)curr->keys + curr->length * key_size;
+        assert(high >= low);
+        great = (size_t)((high - low) / key_size);
+        t = merge(r, *key_num, low, great,
+                  key_size, set->compare);
+        free(r);
+        r = t;
+        *key_num += great;
+        curr = curr->next;
+    }
+
+    return r;
 }
 
 size_t bams_get_size(const BAMS *set)
@@ -327,6 +394,30 @@ static inline SET_NODE * create_node(void *keys, size_t length)
     {
         node->keys = keys;
         node->length = length;
+    }
+
+    return node;
+}
+
+static inline SET_NODE * create_node_from_key(void *key, size_t key_size)
+{
+    SET_NODE *node = (SET_NODE *)malloc(sizeof (SET_NODE));
+    void *keys;
+
+    if (NULL != node)
+    {
+        keys = malloc(key_size);
+        if (NULL != keys)
+        {
+            memcpy(keys, key, key_size);
+            node->keys = keys;
+            node->length = 1;
+        }
+        else
+        {
+            free(node);
+            node = NULL;
+        }
     }
 
     return node;
