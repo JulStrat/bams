@@ -44,11 +44,8 @@ BAMS * bams_create(size_t key_size,
                    int (*compare)(const void *, const void *));
 
 /**
- * Check if set contains given key
- *
- *
- *   
- *
+ * @brief      Check if set contains given key
+ * @deprecated Use @ref bams_count_equal
  */
 int bams_contains(const BAMS *set, const void *key);
 
@@ -113,15 +110,14 @@ size_t bams_count_great(const BAMS *set, const void *key);
  */
 void * bams_less(const BAMS *set, const void *key, size_t *key_num);
 
-/*
- * brief Return array of keys equal to given.  
+/**
+ * @brief Return array of keys equal to given.  
  *
  *
  *   
  *
- *
-void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
  */
+void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
  
 /**
  * @brief Return ordered array of keys great than given.  
@@ -133,9 +129,14 @@ void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
 void * bams_great(const BAMS *set, const void *key, size_t *key_num);
 
 
-/*
-void * bams_array(const void *set, size_t *key_num);
-*/
+/**
+ * @brief Return ordered array of keys.  
+ *
+ *
+ *   
+ *
+ */
+void * bams_array(const BAMS *set, size_t *key_num);
 
 /**
  * @brief Returns number of keys.

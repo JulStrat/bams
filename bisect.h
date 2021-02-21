@@ -17,10 +17,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 /**
- * @file   bisect.h
- * @brief  Array bisection functions.
- *         Binary search algorithm.
- * @author Ioulianos Kakoulidis
+ * @file    bisect.h
+ * @brief   Python like array bisection algorithms.
+ *          Binary search algorithm.
+ * @author  Ioulianos Kakoulidis
  */
 
 #ifndef BISECT_H
@@ -31,9 +31,15 @@ extern "C" {
 #endif
 
 /**
- * @brief Find position of the first element equal or great
- *        than given key in sorted in ascending order array. 
- *        If not found, return ``end'' of array.
+ * @brief   Find position of the first element equal or great
+ *          than given key in sorted in ascending order array. 
+ *          If not found, return ``end'' of array.
+ *
+ * @param key       Bisection key
+ * @param arr       Array
+ * @param el_num    Elements number
+ * @param el_size   Element size
+ * @param compare   Compare function
  *
  */
 void * bisect_left(const void *key, const void *arr,
@@ -41,9 +47,15 @@ void * bisect_left(const void *key, const void *arr,
                    int (*compare)(const void *, const void *));
 
 /**
- * @brief Find position of the first element great
- *        than given key in sorted in ascending order array. 
- *        If not found, return ``end'' of array.
+ * @brief   Find position of the first element great
+ *          than given key in sorted in ascending order array. 
+ *          If not found, return ``end'' of array.
+ *
+ * @param key       Bisection key
+ * @param arr       Array
+ * @param el_num    Elements number
+ * @param el_size   Element size
+ * @param compare   Compare function
  *
  */
 void * bisect_right(const void *key, const void *arr,
@@ -51,9 +63,15 @@ void * bisect_right(const void *key, const void *arr,
                     int (*compare)(const void *, const void *));
 
 /**
- * @brief Find position of the first element equal 
- *        to given key in sorted in ascending order array. 
- *        If not found, return NULL.
+ * @brief   Find position of the first element equal 
+ *          to given key in sorted in ascending order array. 
+ *          If not found, return NULL.
+ *
+ * @param key       Key to find
+ * @param arr       Array
+ * @param el_num    Elements number
+ * @param el_size   Element size
+ * @param compare   Compare function
  *
  */
 void * bin_search(const void *key, const void *arr,

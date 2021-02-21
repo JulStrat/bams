@@ -17,10 +17,10 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 */
 
 /**
- * @file   bisect.c
- * @brief  Array bisection functions.
- *         Binary search algorithm.
- * @author Ioulianos Kakoulidis
+ * @file    bisect.c
+ * @brief   Python like array bisection algorithms.
+ *          Binary search algorithm.
+ * @author  Ioulianos Kakoulidis
  */
 
 #include <stddef.h>
@@ -89,7 +89,7 @@ void * bin_search(const void *key, const void *arr,
 
     if ((off - (char *)arr) == el_num * el_size)
     {
-        // At the ``end'' of array
+        /* At the ``end'' of array */
         return NULL;
     }
     if ((*compare)(key, off) == 0)
