@@ -65,3 +65,43 @@ void * merge(const void *arr_a, size_t num_el_a,
 
     return r;
 }
+
+void * merge_into(void *dst, size_t num_el_dst,
+                  const void *src, size_t num_el_src,
+                  size_t el_size, int (*compare)(const void *, const void *))
+{
+    char *dl;
+    char *sl = (char *)src;
+    char *dc;
+    char *sc = sl + (num_el_src * el_size);
+    char *r = NULL;
+    char *rc = NULL;
+
+    r = (char *)realloc(dst, (num_el_dst + num_el_src) * el_size);
+    rc = r + (num_el_dst + num_el_src) * el_size;
+   
+    dl = (char *)r;
+    dc = dl + (num_el_dst * el_size);
+
+    while ((dl < dc) && (sl < sc))
+    {
+        if ((*compare)(dc - el_size, sc - el_size) > 0)
+        {
+            memcpy(rc - el_size, dc - el_size, el_size);
+            dc -= el_size;
+        }
+        else
+        {
+            memcpy(rc - el_size, sc - el_size, el_size);
+            sc -= el_size;
+        }
+        rc -= el_size;
+    }
+
+    if (sl < sc)
+    {
+        memcpy(r, sl, sc - sl);
+    }
+
+    return r;
+}

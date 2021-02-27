@@ -114,10 +114,10 @@ int bams_insert(BAMS *set, const void *key)
         if (length == (curr->length))
         {
             next = curr->next;
-            t = merge(keys, length, curr->keys, length,
+            t = merge_into(keys, length, curr->keys, length,
                       set->key_size, set->compare);
             length *= 2;
-            free(keys);
+            /* free(keys); */
             free_node(curr);
             curr = next;
             keys = t;
@@ -257,9 +257,9 @@ void * bams_less(const BAMS *set, const void *key, size_t *key_num)
         less = (size_t)((off - (char *)curr->keys) / key_size);
         if (less > 0)
         {
-            t = merge(r, *key_num, curr->keys, less,
+            t = merge_into(r, *key_num, curr->keys, less,
                       key_size, set->compare);
-            free(r);
+            /* free(r); */
             r = t;
             *key_num += less;
         }
@@ -321,9 +321,9 @@ void * bams_great(const BAMS *set, const void *key, size_t *key_num)
         great = (size_t)((high - low) / key_size);
         if (great > 0)
         {
-            t = merge(r, *key_num, low, great,
+            t = merge_into(r, *key_num, low, great,
                       key_size, set->compare);
-            free(r);
+            /* free(r); */
             r = t;
             *key_num += great;
         }
@@ -342,9 +342,9 @@ void * bams_array(const BAMS *set, size_t *key_num)
     *key_num = 0;
     while (NULL != curr)
     {
-        t = merge(r, *key_num, curr->keys, curr->length,
+        t = merge_into(r, *key_num, curr->keys, curr->length,
                   set->key_size, set->compare);
-        free(r);
+        /* free(r); */
         r = t;
         *key_num += curr->length;
         curr = curr->next;

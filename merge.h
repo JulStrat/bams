@@ -33,6 +33,10 @@ void * merge(const void *arr_a, size_t num_el_a,
              const void *arr_b, size_t num_el_b,
              size_t el_size, int (*compare)(const void *, const void *));
 
+void * merge_into(void *dst, size_t num_el_dst,
+                  const void *src, size_t num_el_src,
+                  size_t el_size, int (*compare)(const void *, const void *));
+
 #ifdef __cplusplus
 }
 #endif
