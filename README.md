@@ -3,7 +3,6 @@
 [![codecov.io](https://codecov.io/github/JulStrat/bams?svg=true)]
 (https://codecov.io/github/JulStrat/bams)
 ![license](https://img.shields.io/github/license/JulStrat/bams)
-https://app.codecov.io/gh/JulStrat/bams
 
 # BAMS - binary array multi set
 
