@@ -1,7 +1,5 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/github/JulStrat/bams?svg=true)]
-(https://ci.appveyor.com/project/JulStrat/bams)
-[![codecov.io](https://codecov.io/github/JulStrat/bams?svg=true)]
-(https://codecov.io/github/JulStrat/bams)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/JulStrat/bams?svg=true)](https://ci.appveyor.com/project/JulStrat/bams)
+[![codecov.io](https://codecov.io/github/JulStrat/bams/coverage.svg?branch=master)](https://codecov.io/github/JulStrat/bams?branch=master)
 ![license](https://img.shields.io/github/license/JulStrat/bams)
 
 # BAMS - binary array multi set
