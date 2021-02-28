@@ -258,7 +258,7 @@ void * bams_less(const BAMS *set, const void *key, size_t *key_num)
         if (less > 0)
         {
             t = merge_into(r, *key_num, curr->keys, less,
-                      key_size, set->compare);
+                           key_size, set->compare);
             /* free(r); */
             r = t;
             *key_num += less;
@@ -322,7 +322,7 @@ void * bams_great(const BAMS *set, const void *key, size_t *key_num)
         if (great > 0)
         {
             t = merge_into(r, *key_num, low, great,
-                      key_size, set->compare);
+                           key_size, set->compare);
             /* free(r); */
             r = t;
             *key_num += great;
@@ -343,7 +343,7 @@ void * bams_array(const BAMS *set, size_t *key_num)
     while (NULL != curr)
     {
         t = merge_into(r, *key_num, curr->keys, curr->length,
-                  set->key_size, set->compare);
+                       set->key_size, set->compare);
         /* free(r); */
         r = t;
         *key_num += curr->length;

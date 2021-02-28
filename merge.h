@@ -29,10 +29,41 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 extern "C" {
 #endif
 
+#if 0
+/**
+ *
+ * @brief   Merge two sorted arrays.
+ *
+ * @param arr_a     First array
+ * @param num_el_a  Number of elements in array arr_a
+ * @param arr_b     Second array
+ * @param num_el_b  Number of elements in array arr_b
+ * @param el_size   Element size (in bytes)
+ * @param compare   Compare function
+ *
+ * @return Resulting array or NULL
+ *
+ */
 void * merge(const void *arr_a, size_t num_el_a,
              const void *arr_b, size_t num_el_b,
              size_t el_size, int (*compare)(const void *, const void *));
+#endif
 
+/**
+ *
+ * @brief   Merge two sorted arrays.
+ *          Reallocates dst array memory. Merge elements in reverse order.
+ *
+ * @param dst           Destination array
+ * @param num_el_dst    Number of elements in array dst
+ * @param src           Source array
+ * @param num_el_src    Number of elements in array src
+ * @param el_size       Element size (in bytes)
+ * @param compare       Compare function
+ *
+ * @return Resulting array or NULL
+ *
+ */
 void * merge_into(void *dst, size_t num_el_dst,
                   const void *src, size_t num_el_src,
                   size_t el_size, int (*compare)(const void *, const void *));

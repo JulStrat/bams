@@ -20,7 +20,8 @@ int cmp_int(const void *first, const void *second)
 int arint[ARR_SZ] = {0};
 
 int main(int argc, char *argv[])
-{   int a, b, i;
+{   int a, b;
+    size_t i;
     int min_key = INT_MAX, max_key = INT_MIN;
     BAMS *bas;
     size_t less  = 0;
@@ -84,13 +85,13 @@ int main(int argc, char *argv[])
         }
     }
     assert(less == bams_count_less(bas, &a));
-    printf("Less than %d: Expected %llu, %llu\n", a, less, bams_count_less(bas, &a));
+    printf("Less than %d: Expected %lu, %lu\n", a, less, bams_count_less(bas, &a));
 
     assert(equal == bams_count_equal(bas, &a));
-    printf("Equal to %d: Expected %llu, %llu\n", a, equal, bams_count_equal(bas, &a));
+    printf("Equal to %d: Expected %lu, %lu\n", a, equal, bams_count_equal(bas, &a));
 
     assert(great == bams_count_great(bas, &a));
-    printf("Great than %d: Expected %llu, %llu\n", a, great, bams_count_great(bas, &a));
+    printf("Great than %d: Expected %lu, %lu\n", a, great, bams_count_great(bas, &a));
 
     assert(*(int *)bams_min(bas) == min_key);
     printf("Min key: %d, expected: %d\n", *(int *)bams_min(bas), min_key);
@@ -107,7 +108,7 @@ int main(int argc, char *argv[])
     free(less_keys);
 
     equal_keys = bams_equal(bas, &a, &equal_a);
-    printf("Equal: %llu, %llu\n", equal, equal_a);
+    printf("Equal: %lu, %lu\n", equal, equal_a);
     assert(equal == equal_a);
     for(i = 0; i < equal_a; i++)
     {
@@ -131,7 +132,18 @@ int main(int argc, char *argv[])
     }
     free(all_keys);
 
-    printf("Set size: %d\n", bams_get_size(bas));
+    printf("Set size: %lu\n", bams_get_size(bas));
+    printf("Check structure result: %d\n", bams_check_structure(bas));
+    bams_free(bas);
+
+    /* big set */
+    bas = bams_create(sizeof (int), cmp_int);
+    for (i = 0; i < 1024 * 1024 * 32; i++)
+    {
+        a = rand();
+        bams_insert(bas, &a);
+    }
+    printf("Set size: %lu\n", bams_get_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
     bams_free(bas);
 

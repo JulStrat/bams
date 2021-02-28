@@ -25,6 +25,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #include <stdlib.h>
 #include <string.h>
 
+#if 0
 void * merge(const void *arr_a, size_t num_el_a,
              const void *arr_b, size_t num_el_b,
              size_t el_size, int (*compare)(const void *, const void *))
@@ -37,6 +38,10 @@ void * merge(const void *arr_a, size_t num_el_a,
     char *rc = NULL;
 
     r = (char *)malloc((num_el_a + num_el_b) * el_size);
+    if ((NULL == r) || (0 == (num_el_a + num_el_b) * el_size))
+    {
+        return NULL;
+    }
     rc = r;
 
     while ((ac < ah) && (bc < bh))
@@ -65,6 +70,7 @@ void * merge(const void *arr_a, size_t num_el_a,
 
     return r;
 }
+#endif
 
 void * merge_into(void *dst, size_t num_el_dst,
                   const void *src, size_t num_el_src,
@@ -78,8 +84,12 @@ void * merge_into(void *dst, size_t num_el_dst,
     char *rc = NULL;
 
     r = (char *)realloc(dst, (num_el_dst + num_el_src) * el_size);
+    if ((NULL == r) || (0 == (num_el_dst + num_el_src) * el_size))
+    {
+        return NULL;
+    }
     rc = r + (num_el_dst + num_el_src) * el_size;
-   
+
     dl = (char *)r;
     dc = dl + (num_el_dst * el_size);
 
