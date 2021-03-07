@@ -1,20 +1,25 @@
 /*
-ISC License
+ * ISC License
+ * 
+ * Copyright (c) 2021, Ioulianos Kakoulidis
+ * 
+ * Permission to use, copy, modify, and/or distribute this software for
+ * any purpose with or without fee is hereby granted, provided that the
+ * above copyright notice and this permission notice appear in all copies.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL
+ * WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR 
+ * BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES
+ * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+ * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+ * SOFTWARE. 
+ */
 
-Copyright (c) 2021, Ioulianos Kakoulidis
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-*/
+/*
+ * indent options: -orig -nut -nbc -di1 
+ */
 
 /**
  * @file    merge.h
@@ -44,9 +49,10 @@ extern "C" {
  * @return Resulting array or NULL
  *
  */
-void * merge(const void *arr_a, size_t num_el_a,
-             const void *arr_b, size_t num_el_b,
-             size_t el_size, int (*compare)(const void *, const void *));
+    void *merge(const void *arr_a, size_t num_el_a,
+                const void *arr_b, size_t num_el_b,
+                size_t el_size, int (*compare) (const void *,
+                                                const void *));
 #endif
 
 /**
@@ -64,12 +70,12 @@ void * merge(const void *arr_a, size_t num_el_a,
  * @return Resulting array or NULL
  *
  */
-void * merge_into(void *dst, size_t num_el_dst,
-                  const void *src, size_t num_el_src,
-                  size_t el_size, int (*compare)(const void *, const void *));
+    void *merge_into(void *dst, size_t num_el_dst,
+                     const void *src, size_t num_el_src,
+                     size_t el_size, int (*compare) (const void *,
+                                                     const void *));
 
 #ifdef __cplusplus
 }
 #endif
-
 #endif
