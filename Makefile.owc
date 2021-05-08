@@ -1,0 +1,25 @@
+obj = bams_app.obj bams.obj bisect.obj merge.obj
+bin = t_bams.exe
+
+CC = wcc386
+CFLAGS = -zq -i=..
+LD = wlink
+
+$(bin): $(obj)
+    $(LD) name $@ file { $(obj) }
+
+merge.obj : merge.c
+        $(CC) $(CFLAGS) merge.c
+
+bisect.obj : bisect.c
+        $(CC) $(CFLAGS) bisect.c
+
+bams.obj : bams.c
+        $(CC) $(CFLAGS) bams.c
+
+bams_app.obj : bams_app.c
+        $(CC) $(CFLAGS) bams_app.c
+
+clean: .symbolic
+    del *.obj
+    del $(bin)
