@@ -10,8 +10,8 @@ LIBS     = -L"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib3
 INCS     = -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
 CXXINCS  = -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
 BIN      = bams_app.exe
-CXXFLAGS = $(CXXINCS) -ansi -m32 -w -Wall -Wextra
-CFLAGS   = $(INCS) -ansi -m32 -w -Wall -Wextra
+CXXFLAGS = $(CXXINCS) -m32
+CFLAGS   = $(INCS) -m32
 DEL      = del /f /q
 
 .PHONY: all all-before all-after clean clean-custom
