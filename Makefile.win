@@ -1,25 +1,25 @@
 # Project: bams_app
-# Makefile created by Embarcadero Dev-C++ 6.3
+# Makefile created by Embarcadero Dev-C++ 6.2
 
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
 OBJ      = bams.o bams_app.o merge.o bisect.o
 LINKOBJ  = bams.o bams_app.o merge.o bisect.o
-LIBS     = -L"C:/tools/Dev-Cpp/TDM-GCC-64/lib" -L"C:/tools/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib" -static-libgcc -g3
-INCS     = -I"C:/tools/Dev-Cpp/TDM-GCC-64/include" -I"C:/tools/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/tools/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
-CXXINCS  = -I"C:/tools/Dev-Cpp/TDM-GCC-64/include" -I"C:/tools/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/tools/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/tools/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
+LIBS     = -L"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -g3
+INCS     = -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include"
+CXXINCS  = -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/x86_64-w64-mingw32/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include" -I"C:/OLD_DISK/C_DISK/test/Dev-Cpp/TDM-GCC-64/lib/gcc/x86_64-w64-mingw32/9.2.0/include/c++"
 BIN      = bams_app.exe
-CXXFLAGS = $(CXXINCS) -std=gnu99 -w -Wall -Wextra -pedantic -g3
-CFLAGS   = $(INCS) -std=gnu99 -w -Wall -Wextra -pedantic -g3
-DEL      = C:\tools\Dev-Cpp\devcpp.exe INTERNAL_DEL
+CXXFLAGS = $(CXXINCS) -m32 -w -Wall -Wextra -pedantic -g3
+CFLAGS   = $(INCS) -m32 -w -Wall -Wextra -pedantic -g3
+DEL      = del /f /q
 
 .PHONY: all all-before all-after clean clean-custom
 
 all: all-before $(BIN) all-after
 
 clean: clean-custom
-	${DEL} $(OBJ) $(BIN)
+	${DEL} $(OBJ) $(BIN) 2>nul
 
 $(BIN): $(OBJ)
 	$(CC) $(LINKOBJ) -o $(BIN) $(LIBS)
