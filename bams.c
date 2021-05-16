@@ -58,7 +58,6 @@ struct _BAMS {
 };
 
 static SET_NODE *make_node(void *key, size_t key_size);
-static void free_node(SET_NODE * node);
 
 BAMS *
 bams_create(size_t key_size, int (*compare) (const void *, const void *))
@@ -127,7 +126,11 @@ bams_insert(BAMS * set, const void *key)
             curr->keys = t;
             curr->length += node->length;
             set->head = curr;
-            free_node(node);
+
+            /* free node */
+            free(node->keys);
+            free(node);
+
             node = curr;
             curr = next;
         } else
@@ -201,8 +204,7 @@ bams_count_equal(const BAMS * set, const void *key)
 {
     SET_NODE *curr = set->head;
     size_t key_size = set->key_size;
-    char *low;
-    char *high;
+    char *low, *high;
     size_t equal = 0;
 
     while (NULL != curr) {
@@ -223,8 +225,7 @@ bams_count_great(const BAMS * set, const void *key)
 {
     SET_NODE *curr = set->head;
     size_t key_size = set->key_size;
-    char *low;
-    char *high;
+    char *low, *high;
     size_t great = 0;
 
     while (NULL != curr) {
@@ -275,8 +276,7 @@ bams_equal(const BAMS * set, const void *key, size_t * key_num)
 {
     SET_NODE *curr = set->head;
     size_t key_size = set->key_size;
-    char *low;
-    char *high;
+    char *low, *high;
     char *r = NULL;
     size_t equal = 0;
 
@@ -306,8 +306,7 @@ bams_great(const BAMS * set, const void *key, size_t * key_num)
 {
     SET_NODE *curr = set->head;
     size_t key_size = set->key_size;
-    char *low;
-    char *high;
+    char *low, *high;
     char *r = NULL;
     char *t;
     size_t great = 0;
@@ -465,13 +464,4 @@ make_node(void *key, size_t key_size)
     }
 
     return node;
-}
-
-static void
-free_node(SET_NODE * node)
-{
-    if (NULL != node) {
-        free(node->keys);
-    }
-    free(node);
 }
