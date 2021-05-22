@@ -34,7 +34,6 @@
 extern "C" {
 #endif
 
-#if 0
 /**
  *
  * @brief   Merge two sorted arrays.
@@ -53,7 +52,6 @@ extern "C" {
                 const void *arr_b, size_t num_el_b,
                 size_t el_size, int (*compare) (const void *,
                                                 const void *));
-#endif
 
 /**
  *

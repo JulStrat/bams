@@ -74,6 +74,7 @@ bams_create(size_t key_size, int (*compare) (const void *, const void *))
     return set;
 }
 
+#if 0
 int
 bams_contains(const BAMS * set, const void *key)
 {
@@ -91,6 +92,7 @@ bams_contains(const BAMS * set, const void *key)
 
     return 0;
 }
+#endif
 
 int
 bams_insert(BAMS * set, const void *key)

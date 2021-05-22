@@ -1,158 +1,174 @@
 #include <stdio.h>
 #include <stdlib.h>
-//#include <assert.h>
-#include "greatest.h"
 
 #include "bisect.h"
+#include "greatest.h"
 
-int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
-
-int cmp_int(const void *first, const void *second)
+int
+cmp_int(const void *first, const void *second)
 {
-    int a = *(int *)first;
-    int b = *(int *)second;
+    int a = *(int *) first;
+    int b = *(int *) second;
 
-    if (a < b) return -1;
-    if (a > b) return 1;
+    if (a < b)
+        return -1;
+    if (a > b)
+        return 1;
     return 0;
 }
 
-GREATEST_MAIN_DEFS();
+#define ARR_SZ 1024 * 1024 - 1
+int arint[ARR_SZ] = { 0 };
+#define TEST_NUM 64
 
-int main(int argc, char *argv[])
+void *
+lfind_ge(const void *key, const void *arr, size_t el_num, size_t el_size,
+         int (*compare) (const void *, const void *))
 {
-    int key;
-    int *pos;
+    char *off = (char *) arr;
+    char *high = off + el_num * el_size;
+    int t;
 
-    printf("Test empty array\n");
-    key = -21;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 0, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);
+    while (off < high) {
+        t = (*compare) (key, off);
+        if ((t == 0) || (t < 0)) {
+            return off;
+        }
+        off += el_size;
+    }
 
-    key = 11;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 0, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);	
+    return off;
+}
 
-    key = 11;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 0, sizeof (int), cmp_int);
-    ASSERT_FALSE(pos);
+void *
+lfind_gt(const void *key, const void *arr, size_t el_num, size_t el_size,
+         int (*compare) (const void *, const void *))
+{
+    char *off = (char *) arr;
+    char *high = off + el_num * el_size;
+    int t;
 
-    printf("Test bisect_left\n");
-    // int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
-    key = -21;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);
+    while (off < high) {
+        t = (*compare) (key, off);
+        if (t < 0) {
+            return off;
+        }
+        off += el_size;
+    }
 
-    key = -3;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);
+    return off;
+}
 
-    key = 11;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[2]);
-    ASSERT_EQ(&arr_a[2], pos);
+TEST
+do_bisect_left_test()
+{
+    size_t i;
+    int r;
 
-    key = 12;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[5]);
-    ASSERT_EQ(&arr_a[5], pos);
+    for (i = 0; i < ARR_SZ; i++) {
+        arint[i] = rand();
+    }
 
-    key = 200;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[6]);
-    ASSERT_EQ(&arr_a[6], pos);
+    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
+    for (i = 0; i < TEST_NUM; i++) {
+        r = rand();
+        ASSERT_EQ(lfind_ge(&r, &arint[0], ARR_SZ, sizeof(int), cmp_int),
+                  bisect_left(&r, &arint[0], ARR_SZ, sizeof(int),
+                              cmp_int));
+    }
 
-    key = 300;
-    pos = NULL;
-    pos = bisect_left(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert((pos - &arr_a[0]) == 7);
-    ASSERT_EQ(7, pos - &arr_a[0]);
+    PASS();
+}
 
-    printf("Test bisect_right\n");
-    // int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
-    key = -21;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);
+TEST
+do_bisect_right_test()
+{
+    size_t i;
+    int r;
 
-    key = -3;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[1]);
-    ASSERT_EQ(&arr_a[1], pos);
+    for (i = 0; i < ARR_SZ; i++) {
+        arint[i] = rand();
+    }
 
-    key = 11;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[5]);
-    ASSERT_EQ(&arr_a[5], pos);
+    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
+    for (i = 0; i < TEST_NUM; i++) {
+        r = rand();
+        ASSERT_EQ(lfind_gt(&r, &arint[0], ARR_SZ, sizeof(int), cmp_int),
+                  bisect_right(&r, &arint[0], ARR_SZ, sizeof(int),
+                               cmp_int));
+    }
 
-    key = 12;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[5]);
-    ASSERT_EQ(&arr_a[5], pos);
+    PASS();
+}
 
-    key = 200;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert((pos - &arr_a[0]) == 7);
-    ASSERT_EQ(7, pos - &arr_a[0]);
+TEST
+do_bisect_min_max()
+{
+    size_t i, j;
 
-    key = 300;
-    pos = NULL;
-    pos = bisect_right(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert((pos - &arr_a[0]) == 7);
-    ASSERT_EQ(7, pos - &arr_a[0]);
+    for (i = 0; i < 4; i++) {
+        for (j = 0; j < ARR_SZ; j++) {
+            arint[j] = rand();
+        }
+        qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
 
-    printf("Test bin_search\n");
-    // int arr_a[7] = {-3, 7, 11, 11, 11, 101, 200};
-    key = -22;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    ASSERT_FALSE(pos);
+        /*
+         * min 
+         */
+        ASSERT_EQ(lfind_gt
+                  (&arint[0], &arint[0], ARR_SZ, sizeof(int), cmp_int),
+                  bisect_right(&arint[0], &arint[0], ARR_SZ, sizeof(int),
+                               cmp_int));
+        ASSERT_EQ(lfind_ge
+                  (&arint[0], &arint[0], ARR_SZ, sizeof(int), cmp_int),
+                  bisect_left(&arint[0], &arint[0], ARR_SZ, sizeof(int),
+                              cmp_int));
 
-    key = -3;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[0]);
-    ASSERT_EQ(&arr_a[0], pos);
+        /*
+         * max 
+         */
+        ASSERT_EQ(lfind_gt
+                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof(int),
+                   cmp_int), bisect_right(&arint[ARR_SZ - 1], &arint[0],
+                                          ARR_SZ, sizeof(int), cmp_int));
+        ASSERT_EQ(lfind_ge
+                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof(int),
+                   cmp_int), bisect_left(&arint[ARR_SZ - 1], &arint[0],
+                                         ARR_SZ, sizeof(int), cmp_int));
+    }
 
-    key = 11;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[2]);
-    ASSERT_EQ(&arr_a[2], pos);
+    PASS();
+}
 
-    key = 12;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    ASSERT_FALSE(pos);
+SUITE(bisect_suite)
+{
+    int i;
 
-    key = 200;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    //assert(pos == &arr_a[6]);
-    ASSERT_EQ(&arr_a[6], pos);
+    for (i = 0; i < TEST_NUM; i++) {
+        RUN_TEST(do_bisect_left_test);
+    }
 
-    key = 300;
-    pos = NULL;
-    pos = bin_search(&key, &arr_a[0], 7, sizeof (int), cmp_int);
-    ASSERT_FALSE(pos);
+    for (i = 0; i < TEST_NUM; i++) {
+        RUN_TEST(do_bisect_right_test);
+    }
 
-    printf("All tests passed.\n");
-    return EXIT_SUCCESS;
+    for (i = 0; i < TEST_NUM; i++) {
+        RUN_TEST(do_bisect_min_max);
+    }
+}
+
+GREATEST_MAIN_DEFS();
+int
+main(int argc, char *argv[])
+{
+    GREATEST_MAIN_BEGIN();
+#if defined(__STDC_VERSION__)
+    printf("Compiler Standard version - %ld\n", __STDC_VERSION__);
+#endif
+
+    srand(time(NULL));
+
+    RUN_SUITE(bisect_suite);
+
+    GREATEST_MAIN_END();
 }

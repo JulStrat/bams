@@ -62,12 +62,14 @@ main(int argc, char *argv[])
         bams_insert(bas, &arint[i]);
     }
 
+#if 0
     for (i = 0; i < ARR_SZ; i++) {
         if (0 == bams_contains(bas, &arint[i])) {
             printf("Error: %d not in set.\n", arint[i]);
             break;
         };
     }
+#endif    
 
     a = arint[0];
     for (i = 0; i < ARR_SZ; i++) {

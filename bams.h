@@ -44,11 +44,14 @@ extern "C" {
     BAMS *bams_create(size_t key_size,
                       int (*compare) (const void *, const void *));
 
+
+#if 0
 /**
  * @brief      Check if set contains given key
  * @deprecated Use @ref bams_count_equal
  */
     int bams_contains(const BAMS * set, const void *key);
+#endif
 
 /**
  * @brief Insert key into set.

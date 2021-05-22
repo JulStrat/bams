@@ -23,8 +23,7 @@
 
 /**
  * @file    bisect.h
- * @brief   Python like array bisection algorithms.
- *          Binary search algorithm.
+ * @brief   Ordered array bisection algorithms.
  * @author  Ioulianos Kakoulidis
  */
 
@@ -67,6 +66,7 @@ extern "C" {
                        size_t el_num, size_t el_size,
                        int (*compare) (const void *, const void *));
 
+#if 0
 /**
  * @brief   Find position of the first element equal 
  *          to given key in sorted in ascending order array. 
@@ -82,6 +82,7 @@ extern "C" {
     void *bin_search(const void *key, const void *arr,
                      size_t el_num, size_t el_size,
                      int (*compare) (const void *, const void *));
+#endif
 
 #ifdef __cplusplus
 }

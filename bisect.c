@@ -23,8 +23,7 @@
 
 /**
  * @file    bisect.c
- * @brief   Python like array bisection algorithms.
- *          Binary search algorithm.
+ * @brief   Ordered array bisection algorithms.
  * @author  Ioulianos Kakoulidis
  */
 
@@ -38,14 +37,12 @@ bisect_left(const void *key, const void *arr,
     size_t low = 0;
     size_t high = el_num;
     size_t mid;
-    int t;
-    char *off = NULL;
+    char *off;
 
     while (low < high) {
         mid = low + ((high - low) >> 1);
         off = (char *) arr + mid * el_size;
-        t = (*compare) (key, off);
-        if (t > 0) {
+        if ((*compare) (key, off) > 0) {
             low = mid + 1;
         } else {
             high = mid;
@@ -63,14 +60,12 @@ bisect_right(const void *key, const void *arr,
     size_t low = 0;
     size_t high = el_num;
     size_t mid;
-    int t;
-    char *off = NULL;
+    char *off;
 
     while (low < high) {
         mid = low + ((high - low) >> 1);
         off = (char *) arr + mid * el_size;
-        t = (*compare) (key, off);
-        if (t < 0) {
+        if ((*compare) (key, off) < 0) {
             high = mid;
         } else {
             low = mid + 1;
@@ -80,6 +75,7 @@ bisect_right(const void *key, const void *arr,
     return (char *) arr + low * el_size;
 }
 
+#if 0
 void *
 bin_search(const void *key, const void *arr,
            size_t el_num, size_t el_size,
@@ -98,3 +94,4 @@ bin_search(const void *key, const void *arr,
     }
     return NULL;
 }
+#endif
