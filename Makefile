@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -m32 -g -w -Wall -Wextra -pedantic
+CFLAGS = -m32 -g -w -Wall -Wextra -pedantic --coverage
 
 all: test_merge test_bisect bams_app
 
