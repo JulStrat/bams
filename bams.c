@@ -44,6 +44,7 @@ struct _SET_NODE {
 };
 
 typedef struct _SET_NODE SET_NODE;
+typedef enum {COPY_POINTER = 0, COPY_DATA} BAMS_TYPE;
 
 /** BAMS structure */
 struct _BAMS {
@@ -55,21 +56,31 @@ struct _BAMS {
     SET_NODE *head;
     /** Set cardinality (number of keys) */
     size_t size;
+    BAMS_TYPE type;    
 };
 
-static SET_NODE *make_node(void *key, size_t key_size);
+static SET_NODE *make_node(const BAMS * set, void *key);
 
 BAMS *
 bams_create(size_t key_size, int (*compare) (const void *, const void *))
 {
     BAMS *set = (BAMS *) malloc(sizeof(BAMS));
 
-    if (NULL != set) {
-        set->key_size = key_size;
-        set->compare = compare;
-        set->head = NULL;
-        set->size = 0;
+    if (!set) {
+        return NULL;
     }
+
+    if (key_size) {
+        set->key_size = key_size;
+        set->type = COPY_DATA;
+    }
+    else {
+        set->key_size = sizeof (void *);
+        set->type = COPY_POINTER;
+    }
+    set->compare = compare;
+    set->head = NULL;
+    set->size = 0;
 
     return set;
 }
@@ -104,8 +115,8 @@ bams_insert(BAMS * set, const void *key)
     SET_NODE *node;
     SET_NODE *next;
 
-    node = make_node(key, set->key_size);
-    if (NULL == node) {
+    node = make_node(set, key);
+    if (!node) {
         return 0;
     }
 
@@ -123,7 +134,7 @@ bams_insert(BAMS * set, const void *key)
             t = merge_into(curr->keys, curr->length, node->keys,
                            node->length, set->key_size, set->compare);
             if (NULL == t) {
-                return 1;       /* return norm error */
+                return 1;       /* return norm error ! */
             }
             curr->keys = t;
             curr->length += node->length;
@@ -448,22 +459,31 @@ bams_check_structure(const BAMS * set)
  */
 
 static SET_NODE *
-make_node(void *key, size_t key_size)
+make_node(const BAMS * set, void *key)
 {
     SET_NODE *node = (SET_NODE *) malloc(sizeof(SET_NODE));
     void *keys;
-
-    if (NULL != node) {
-        keys = malloc(key_size);
-        if (NULL != keys) {
-            memcpy(keys, key, key_size);
-            node->keys = keys;
-            node->length = 1;
-        } else {
-            free(node);
-            node = NULL;
-        }
+    
+    if (!node) {
+        return NULL;
     }
+
+    keys = malloc(set->key_size);
+    if (!keys) {
+        free(node);
+        return NULL;
+    }
+
+    switch (set->type) {
+        case COPY_DATA:
+            memcpy(keys, key, set->key_size);
+            break;
+        default:
+            *(void **)keys = key;
+            break;
+    }
+    node->keys = keys;
+    node->length = 1;
 
     return node;
 }

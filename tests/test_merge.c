@@ -112,18 +112,18 @@ SUITE(merge_suite)
     int i;
 
     for (i = 0; i < TEST_NUM; i++) {
-        RUN_TESTp(do_merge_test, (rand() % ARR_SZ));
+        RUN_TEST1(do_merge_test, (rand() % ARR_SZ));
     }
 
-    RUN_TESTp(do_merge_test, 0);
-    RUN_TESTp(do_merge_test, ARR_SZ);
+    RUN_TEST1(do_merge_test, 0);
+    RUN_TEST1(do_merge_test, ARR_SZ);
 
     for (i = 0; i < TEST_NUM; i++) {
-        RUN_TESTp(do_merge_into_test, (rand() % ARR_SZ));
+        RUN_TEST1(do_merge_into_test, (rand() % ARR_SZ));
     }
 
-    RUN_TESTp(do_merge_into_test, 0);
-    RUN_TESTp(do_merge_into_test, ARR_SZ);
+    RUN_TEST1(do_merge_into_test, 0);
+    RUN_TEST1(do_merge_into_test, ARR_SZ);
 }
 
 GREATEST_MAIN_DEFS();
