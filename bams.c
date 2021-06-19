@@ -200,6 +200,12 @@ bams_count_less(const BAMS * set, const void *key)
     size_t key_size = set->key_size;
     char *off;
     size_t less = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     while (NULL != curr) {
         off = (char *) bisect_left(key, curr->keys, curr->length,
@@ -219,6 +225,12 @@ bams_count_equal(const BAMS * set, const void *key)
     size_t key_size = set->key_size;
     char *low, *high;
     size_t equal = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     while (NULL != curr) {
         low = (char *) bisect_left(key, curr->keys, curr->length,
@@ -240,6 +252,12 @@ bams_count_great(const BAMS * set, const void *key)
     size_t key_size = set->key_size;
     char *low, *high;
     size_t great = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     while (NULL != curr) {
         low = (char *) bisect_right(key, curr->keys, curr->length,
@@ -262,6 +280,12 @@ bams_less(const BAMS * set, const void *key, size_t * key_num)
     char *r = NULL;
     char *t;
     size_t less = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     *key_num = 0;
     while (NULL != curr) {
@@ -292,6 +316,12 @@ bams_equal(const BAMS * set, const void *key, size_t * key_num)
     char *low, *high;
     char *r = NULL;
     size_t equal = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     *key_num = 0;
     while (NULL != curr) {
@@ -323,6 +353,12 @@ bams_great(const BAMS * set, const void *key, size_t * key_num)
     char *r = NULL;
     char *t;
     size_t great = 0;
+    void *tkey;
+
+    if (set->type == COPY_POINTER) {
+	tkey = key;
+        key = &tkey;
+    }
 
     *key_num = 0;
     while (NULL != curr) {

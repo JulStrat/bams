@@ -36,6 +36,20 @@ main(int argc, char *argv[]) {
 
     printf("Set size: %lu\n", bams_get_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
+
+    bams_clear(bas);
+
+    for (i = 1; i < argc; i++) {
+        bams_insert(bas, argv[i]);
+    }
+    keys = bams_array(bas, &bas_sz);
+    for (i = 0; i < bas_sz; i++)
+        printf("%s\n", keys[i]);
+
+    free(keys);
+
+    printf("Set size: %lu\n", bams_get_size(bas));
+    printf("Check structure result: %d\n", bams_check_structure(bas));
     
     bams_free(bas);
     /* qsort(&argv[1], argc-1, sizeof (char *), cmp_str);
