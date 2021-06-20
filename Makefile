@@ -1,5 +1,7 @@
 CC = gcc
-# CFLAGS = -m32 -g -w -Wall -Wextra -Wconversion -ansi -pedantic --coverage
+# WIN32 TDM
+# CFLAGS = -m32 -g -w -Wall -Wextra -Wconversion -ansi -pedantic
+# Linux
 CFLAGS = -g -w -Wall -Wextra -Wconversion -ansi -pedantic --coverage -fsanitize=address -static-libasan
 all: test_merge test_bisect bams_app bams_ptr_app test_bams_ptr
 

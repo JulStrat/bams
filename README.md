@@ -10,11 +10,15 @@ chapter 17 "Amortized Analysis", problem 17-2 "Making binary search dynamic".
 
 Name BAS - "binary array set" was made by [Nayuki](https://www.nayuki.io/page/binary-array-set).
 
+Testing framework - [greatest](https://github.com/silentbicycle/greatest).
+
+List of English words - [words_alpha.txt](https://github.com/dwyl/english-words).
+
 ## Usage examples
 
 ### Inversion count
 Solution to SPOJ problem [INVCNT](https://www.spoj.com/problems/INVCNT/)
-```
+``` C
 #include <stdio.h>
 #include "bams.h"
 

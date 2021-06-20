@@ -17,6 +17,10 @@
  * SOFTWARE. 
  */
 
+/*
+ * indent options: -orig -nut -nbc -di1 
+ */
+
 /**
  * @file   bams.h
  * @brief  Binary Array MultiSet C API.
