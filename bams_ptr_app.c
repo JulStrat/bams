@@ -31,7 +31,10 @@ main(int argc, char *argv[]) {
     keys = bams_array(bas, &bas_sz);
     for (i = 0; i < bas_sz; i++)
         printf("%s\n", keys[i]);
-
+	
+	printf("Min key: %s\n", bams_min(bas));
+	printf("Max key: %s\n", bams_max(bas));
+	
     free(keys);
 
     printf("Set size: %lu\n", bams_get_size(bas));
@@ -45,6 +48,9 @@ main(int argc, char *argv[]) {
     keys = bams_array(bas, &bas_sz);
     for (i = 0; i < bas_sz; i++)
         printf("%s\n", keys[i]);
+
+	printf("Min key: %s\n", bams_min(bas));
+	printf("Max key: %s\n", bams_max(bas));
 
     free(keys);
 

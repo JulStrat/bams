@@ -164,6 +164,9 @@ bams_min(const BAMS * set)
     void *min_key = NULL;
 
     if (set->size > 0) {
+		assert(curr != NULL);
+		assert(curr->keys != NULL);
+		
         min_key = curr->keys;
         while (NULL != curr->next) {
             curr = curr->next;
@@ -173,7 +176,13 @@ bams_min(const BAMS * set)
         }
     }
 
-    return min_key;
+    if (set->type == COPY_POINTER) {
+		return *(void **)min_key;
+    }
+	else {
+		/* TO DO - Make key copy ! */
+		return min_key;
+	}
 }
 
 void *
@@ -185,6 +194,9 @@ bams_max(const BAMS * set)
     char *max_key = NULL;
 
     if (set->size > 0) {
+		assert(curr != NULL);
+		assert(curr->keys != NULL);
+		
         max_key = (char *) curr->keys + (curr->length - 1) * key_size;
         while (NULL != curr->next) {
             curr = curr->next;
@@ -195,7 +207,13 @@ bams_max(const BAMS * set)
         }
     }
 
-    return max_key;
+    if (set->type == COPY_POINTER) {
+		return *(void **)max_key;
+    }
+	else {
+		/* TO DO - Make key copy ! */
+		return max_key;
+	}
 }
 
 size_t
