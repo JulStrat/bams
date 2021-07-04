@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "merge.h"
 #include "greatest.h"
+#include "merge.h"
 
 int
 cmp_int(const void *first, const void *second)
@@ -18,16 +18,16 @@ cmp_int(const void *first, const void *second)
     return 0;
 }
 
-#define ARR_SZ 1024 * 1024 - 1
+#define ARR_SZ 30971
 int arint[ARR_SZ] = { 0 };
-#define TEST_NUM 64
+#define TEST_NUM 128
 
 TEST
-do_merge_test(size_t c)
+do_merge_test(int c)
 {
     size_t i;
     void *la, *ra, *r;
-
+    
     for (i = 0; i < ARR_SZ; i++) {
         arint[i] = rand();
     }
@@ -36,14 +36,7 @@ do_merge_test(size_t c)
     qsort(&arint[c], ARR_SZ - c, sizeof(int), cmp_int);
 
     la = malloc(c * sizeof(int));
-    if (c) {
-        ASSERT(la);
-    }
-
     ra = malloc((ARR_SZ - c) * sizeof(int));
-    if (ARR_SZ - c) {
-        ASSERT(ra);
-    }
 
     memcpy(la, &arint[0], c * sizeof(int));
     memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof(int));
@@ -54,72 +47,68 @@ do_merge_test(size_t c)
     qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
     ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof(int));
 
-    if (la) {
-        free(la);
-    }
-    if (ra) {
-        free(ra);
-    }
+    free(la);
+    free(ra);
     free(r);
 
-    /*
-     * printf("c - %d\n", (int)c); 
-     */
     PASS();
 }
 
 TEST
-do_merge_into_test(size_t c)
+do_merge_into_test(int c)
 {
     size_t i;
     void *la, *ra, *r;
-
+    
     for (i = 0; i < ARR_SZ; i++) {
         arint[i] = rand();
     }
 
     qsort(&arint[0], c, sizeof(int), cmp_int);
     qsort(&arint[c], ARR_SZ - c, sizeof(int), cmp_int);
+	
     la = malloc(c * sizeof(int));
-    if (c) {
-        ASSERT(la);
-    }
     ra = malloc((ARR_SZ - c) * sizeof(int));
-    if (ARR_SZ - c) {
-        ASSERT(ra);
-    }
 
     memcpy(la, &arint[0], c * sizeof(int));
     memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof(int));
 
     r = merge_into(la, c, ra, ARR_SZ - c, sizeof(int), cmp_int);
     ASSERT(r);
+
     qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
     ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof(int));
 
-    if (ra) {
-        free(ra);
-    }
+    free(ra);
     free(r);
-    /*
-     * printf("c - %d\n", (int)c); 
-     */
+
     PASS();
 }
 
 SUITE(merge_suite)
 {
     int i;
+	int c;
 
     for (i = 0; i < TEST_NUM; i++) {
-        RUN_TEST1(do_merge_test, (rand() % ARR_SZ));
+		c = (rand() % ARR_SZ);
+		if ((c < 0) || (c > ARR_SZ)) continue;
+        RUN_TEST1(do_merge_test, c);
     }
 
     RUN_TEST1(do_merge_test, 0);
     RUN_TEST1(do_merge_test, ARR_SZ);
+}
 
+SUITE(merge_into_suite)
+{
+    int i;
+	int c;
+	
     for (i = 0; i < TEST_NUM; i++) {
-        RUN_TEST1(do_merge_into_test, (rand() % ARR_SZ));
+		c = (rand() % ARR_SZ);
+		if ((c < 0) || (c > ARR_SZ)) continue;
+        RUN_TEST1(do_merge_into_test, c);
     }
 
     RUN_TEST1(do_merge_into_test, 0);
@@ -138,6 +127,7 @@ main(int argc, char *argv[])
     srand(time(NULL));
 
     RUN_SUITE(merge_suite);
+    RUN_SUITE(merge_into_suite);	
 
     GREATEST_MAIN_END();
 }
