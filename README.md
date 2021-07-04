@@ -16,36 +16,36 @@ List of English words - [words_alpha.txt](https://github.com/dwyl/english-words)
 
 ## API
 ``` C
-    BAMS * bams_create(size_t key_size,
-                      int (*compare) (const void *, const void *));
+BAMS * bams_create(size_t key_size,
+				  int (*compare) (const void *, const void *));
 
-    int bams_insert(BAMS *set, const void *key);
+int bams_insert(BAMS *set, const void *key);
 
-    void * bams_min(const BAMS *set);
+void * bams_min(const BAMS *set);
 
-    void * bams_max(const BAMS *set);
+void * bams_max(const BAMS *set);
 
-    size_t bams_count_less(const BAMS *set, const void *key);
+size_t bams_count_less(const BAMS *set, const void *key);
 
-    size_t bams_count_equal(const BAMS *set, const void *key);
+size_t bams_count_equal(const BAMS *set, const void *key);
 
-    size_t bams_count_great(const BAMS *set, const void *key);
+size_t bams_count_great(const BAMS *set, const void *key);
 
-    void * bams_less(const BAMS *set, const void *key, size_t *key_num);
+void * bams_less(const BAMS *set, const void *key, size_t *key_num);
 
-    void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
+void * bams_equal(const BAMS *set, const void *key, size_t *key_num);
 
-    void * bams_great(const BAMS *set, const void *key, size_t *key_num);
+void * bams_great(const BAMS *set, const void *key, size_t *key_num);
 
-    void * bams_array(const BAMS *set, size_t *key_num);
+void * bams_array(const BAMS *set, size_t *key_num);
 
-    size_t bams_get_size(const BAMS *set);
+size_t bams_get_size(const BAMS *set);
 
-    void bams_clear(BAMS *set);
+void bams_clear(BAMS *set);
 
-    void bams_free(BAMS *set);
+void bams_free(BAMS *set);
 
-    int bams_check_structure(const BAMS *set);	
+int bams_check_structure(const BAMS *set);	
 ```
 
 ## Usage examples
