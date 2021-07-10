@@ -5,25 +5,25 @@ CC = gcc
 CFLAGS = -g -w -Wall -Wextra -Wconversion -ansi -pedantic --coverage -fsanitize=address -static-libasan
 all: test_merge test_bisect bams_app bams_ptr_app test_bams_ptr
 
-test_merge: test_merge.o merge.o
-	$(CC) $(CFLAGS) -o test_merge test_merge.o merge.o
+test_merge: test_merge.o
+	$(CC) $(CFLAGS) -o test_merge test_merge.o
 
-test_bisect: test_bisect.o bisect.o
-	$(CC) $(CFLAGS) -o test_bisect test_bisect.o bisect.o
+test_bisect: test_bisect.o
+	$(CC) $(CFLAGS) -o test_bisect test_bisect.o
 
-bams_app: bams_app.o bams.o bisect.o merge.o
-	$(CC) $(CFLAGS) -o bams_app bams_app.o bams.o bisect.o merge.o
+bams_app: bams_app.o bams.o
+	$(CC) $(CFLAGS) -o bams_app bams_app.o bams.o
 
-bams_ptr_app: bams_ptr_app.o bams.o bisect.o merge.o
-	$(CC) $(CFLAGS) -o bams_ptr_app bams_ptr_app.o bams.o bisect.o merge.o
+bams_ptr_app: bams_ptr_app.o bams.o
+	$(CC) $(CFLAGS) -o bams_ptr_app bams_ptr_app.o bams.o
 
-test_bams_ptr: test_bams_ptr.o bams.o bisect.o merge.o
-	$(CC) $(CFLAGS) -o test_bams_ptr test_bams_ptr.o bams.o bisect.o merge.o
+test_bams_ptr: test_bams_ptr.o bams.o
+	$(CC) $(CFLAGS) -o test_bams_ptr test_bams_ptr.o bams.o
 
-test_merge.o: tests/test_merge.c tests/greatest.h merge.h
+test_merge.o: tests/test_merge.c tests/greatest.h sh_merge.h
 	$(CC) -c $(CFLAGS) -o test_merge.o -I. tests/test_merge.c
 
-test_bisect.o: tests/test_bisect.c tests/greatest.h bisect.h
+test_bisect.o: tests/test_bisect.c tests/greatest.h sh_bisect.h
 	$(CC) -c $(CFLAGS) -o test_bisect.o -I. tests/test_bisect.c
 
 bams_app.o: bams_app.c bams.h
@@ -38,8 +38,3 @@ test_bams_ptr.o: test_bams_ptr.c bams.h
 bams.o: bams.c bams.h
 	$(CC) -c $(CFLAGS) -o bams.o bams.c
 
-merge.o: merge.c
-	$(CC) -c $(CFLAGS) -o merge.o merge.c
-
-bisect.o: bisect.c
-	$(CC) -c $(CFLAGS) -o bisect.o bisect.c

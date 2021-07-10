@@ -14,22 +14,23 @@ cmp_str(const void *first, const void *second)
 }
 
 int
-main(int argc, char *argv[]) {
+main(int argc, char *argv[])
+{
     BAMS *bas;
     char **keys;
     char **lt_keys = NULL, **eq_keys = NULL, **gt_keys = NULL;
-    size_t bas_sz = 0;    
+    size_t bas_sz = 0;
     int i;
     FILE *shuff;
     char bf[1024];
     char *key;
-	size_t lt_num = 0, eq_num = 0, gt_num = 0;
+    size_t lt_num = 0, eq_num = 0, gt_num = 0;
 
     shuff = fopen(argv[1], "r");
     bas = bams_create(0, cmp_str);
 
     while (fgets(bf, 1024, shuff)) {
-        key = malloc(strlen(bf)+1);
+        key = malloc(strlen(bf) + 1);
         strcpy(key, bf);
         bams_insert(bas, key);
     }
@@ -43,8 +44,8 @@ main(int argc, char *argv[]) {
 
     gt_keys = bams_great(bas, "obelisk", &gt_num);
     assert(gt_num == bams_count_great(bas, "obelisk"));
-	
-	assert(bams_get_size(bas) == (lt_num+eq_num+gt_num));
+
+    assert(bams_get_size(bas) == (lt_num + eq_num + gt_num));
 
     for (i = 0; i < lt_num; i++) {
         printf("%s", lt_keys[i]);
@@ -60,36 +61,34 @@ main(int argc, char *argv[]) {
         printf("%s", gt_keys[i]);
         free(gt_keys[i]);
     }
-	
-	free(lt_keys); free(eq_keys); free(gt_keys);
-    
-	/*
-	keys = bams_array(bas, &bas_sz);
-	*/
-	
-/*
-    keys = bams_less(bas, "b", &bas_sz);
-*/
 
-/*
-    for (i = 0; i < bas_sz; i++) {
-        printf("%s", keys[i]);
-        free(keys[i]);
-    }
+    free(lt_keys);
+    free(eq_keys);
+    free(gt_keys);
 
-    free(keys);
-*/
-	
-/*
-    printf("Set size: %lu\n", bams_get_size(bas));
-    printf("Check structure result: %d\n", bams_check_structure(bas));
-*/
-    
+    /*
+     * keys = bams_array(bas, &bas_sz); 
+     */
+
+    /*
+     * keys = bams_less(bas, "b", &bas_sz); 
+     */
+
+    /*
+     * for (i = 0; i < bas_sz; i++) { printf("%s", keys[i]); free(keys[i]); }
+     * 
+     * free(keys); 
+     */
+
+    /*
+     * printf("Set size: %lu\n", bams_get_size(bas)); printf("Check structure 
+     * result: %d\n", bams_check_structure(bas)); 
+     */
+
     bams_free(bas);
-    /* qsort(&argv[1], argc-1, sizeof (char *), cmp_str);
-    for (i = 1; i < argc; i++) {
-        printf("%s\n", argv[i]);
-    }
-    */
+    /*
+     * qsort(&argv[1], argc-1, sizeof (char *), cmp_str); for (i = 1; i <
+     * argc; i++) { printf("%s\n", argv[i]); } 
+     */
     return 0;
 }

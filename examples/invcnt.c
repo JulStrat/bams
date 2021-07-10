@@ -6,6 +6,7 @@ cmp_int(const void *first, const void *second)
 {
     int a = *(int *) first;
     int b = *(int *) second;
+
     if (a < b)
         return -1;
     if (a > b)
@@ -20,7 +21,8 @@ main(int argc, char *argv[])
     unsigned long inv;
     BAMS *bas;
 
-    bas = bams_create(sizeof(int), cmp_int);
+    bas = bams_create(sizeof (int), cmp_int);
+
     scanf("%d", &tc);
     while (tc--) {
         inv = 0;

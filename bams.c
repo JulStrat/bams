@@ -18,7 +18,7 @@
  */
 
 /*
- * indent options: -orig -nut -nbc -di1 
+ * GNU indent program options: -orig -bad -bap -bs -cli2 -di1 -nbc -nut
  */
 
 /**
@@ -34,8 +34,11 @@
 #include <assert.h>
 
 #include "bams.h"
-#include "merge.h"
-#include "bisect.h"
+
+#define SH_MERGE_IMPLEMENTATION
+#include "sh_merge.h"
+#define SH_BISECT_IMPLEMENTATION
+#include "sh_bisect.h"
 
 /** Linked list of BAMS nodes */
 struct _SET_NODE {
@@ -48,7 +51,9 @@ struct _SET_NODE {
 };
 
 typedef struct _SET_NODE SET_NODE;
-typedef enum { COPY_POINTER = 0, COPY_DATA } BAMS_TYPE;
+typedef enum {
+    COPY_POINTER = 0, COPY_DATA
+} BAMS_TYPE;
 
 /** BAMS structure */
 struct _BAMS {
@@ -63,7 +68,7 @@ struct _BAMS {
     BAMS_TYPE type;
 };
 
-static SET_NODE *make_node(const BAMS * set, void *key);
+static SET_NODE *make_node(const BAMS * set, const void *key);
 
 BAMS *
 bams_create(size_t key_size, int (*compare) (const void *, const void *))
@@ -71,8 +76,8 @@ bams_create(size_t key_size, int (*compare) (const void *, const void *))
     BAMS *set;
 
     assert(NULL != compare);
-	
-    set = (BAMS *) malloc(sizeof(BAMS));
+
+    set = (BAMS *) malloc(sizeof (BAMS));
     if (!set) {
         return NULL;
     }
@@ -81,7 +86,8 @@ bams_create(size_t key_size, int (*compare) (const void *, const void *))
         set->key_size = key_size;
         set->type = COPY_DATA;
     } else {
-        set->key_size = sizeof(void *);
+        set->key_size = sizeof (void *);
+
         set->type = COPY_POINTER;
     }
     set->compare = compare;
@@ -120,11 +126,11 @@ bams_insert(BAMS * set, const void *key)
     size_t length = 1;
     SET_NODE *node;
     SET_NODE *next;
-	
-	assert(NULL != set);
-	assert(NULL != key);
-    
-	curr = set->head;
+
+    assert(NULL != set);
+    assert(NULL != key);
+
+    curr = set->head;
     node = make_node(set, key);
     if (!node) {
         return 0;
@@ -144,7 +150,9 @@ bams_insert(BAMS * set, const void *key)
             t = merge_into(curr->keys, curr->length, node->keys,
                            node->length, set->key_size, set->compare);
             if (NULL == t) {
-                return 1;       /* return norm error ! */
+                return 1;       /*
+                                 * return norm error ! 
+                                 */
             }
             curr->keys = t;
             curr->length += node->length;
@@ -170,13 +178,13 @@ bams_min(const BAMS * set)
     SET_NODE *curr;
     void *min_key = NULL;
 
-	assert(NULL != set);
+    assert(NULL != set);
 
     curr = set->head;
     if (set->size > 0) {
-		assert(curr != NULL);
-		assert(curr->keys != NULL);
-		
+        assert(curr != NULL);
+        assert(curr->keys != NULL);
+
         min_key = curr->keys;
         while (NULL != curr->next) {
             curr = curr->next;
@@ -187,12 +195,13 @@ bams_min(const BAMS * set)
     }
 
     if (set->type == COPY_POINTER) {
-		return *(void **)min_key;
+        return *(void **) min_key;
+    } else {
+        /*
+         * TO DO - Make key copy !? 
+         */
+        return min_key;
     }
-	else {
-		/* TO DO - Make key copy !? */
-		return min_key;
-	}
 }
 
 void *
@@ -206,12 +215,12 @@ bams_max(const BAMS * set)
     assert(NULL != set);
 
     curr = set->head;
-    key_size = set->key_size;	
-	
+    key_size = set->key_size;
+
     if (set->size > 0) {
-		assert(curr != NULL);
-		assert(curr->keys != NULL);
-		
+        assert(curr != NULL);
+        assert(curr->keys != NULL);
+
         max_key = (char *) curr->keys + (curr->length - 1) * key_size;
         while (NULL != curr->next) {
             curr = curr->next;
@@ -223,12 +232,13 @@ bams_max(const BAMS * set)
     }
 
     if (set->type == COPY_POINTER) {
-		return *(void **)max_key;
+        return *(void **) max_key;
+    } else {
+        /*
+         * TO DO - Make key copy !? 
+         */
+        return max_key;
     }
-	else {
-		/* TO DO - Make key copy !? */
-		return max_key;
-	}
 }
 
 size_t
@@ -238,12 +248,12 @@ bams_count_less(const BAMS * set, const void *key)
     size_t key_size;
     char *off;
     size_t less = 0;
-    void *tkey;
-	
-    assert(NULL != set);	
-	assert(NULL != key);	
-	
-    curr = set->head;	
+    const void *tkey;
+
+    assert(NULL != set);
+    assert(NULL != key);
+
+    curr = set->head;
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
@@ -269,12 +279,12 @@ bams_count_equal(const BAMS * set, const void *key)
     size_t key_size;
     char *low, *high;
     size_t equal = 0;
-    void *tkey;
+    const void *tkey;
 
-    assert(NULL != set);	
-	assert(NULL != key);	
+    assert(NULL != set);
+    assert(NULL != key);
 
-    curr = set->head;	
+    curr = set->head;
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
@@ -302,12 +312,12 @@ bams_count_great(const BAMS * set, const void *key)
     size_t key_size;
     char *low, *high;
     size_t great = 0;
-    void *tkey;
+    const void *tkey;
 
-    assert(NULL != set);	
-	assert(NULL != key);	
-	
-    curr = set->head;	
+    assert(NULL != set);
+    assert(NULL != key);
+
+    curr = set->head;
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
@@ -328,7 +338,7 @@ bams_count_great(const BAMS * set, const void *key)
 }
 
 void *
-bams_less(const BAMS * set, const void *key, size_t * key_num)
+bams_less(const BAMS * set, const void *key, size_t *key_num)
 {
     SET_NODE *curr;
     size_t key_size;
@@ -336,15 +346,15 @@ bams_less(const BAMS * set, const void *key, size_t * key_num)
     char *r = NULL;
     char *t;
     size_t less = 0;
-    void *tkey;
+    const void *tkey;
 
-    assert(NULL != set);	
-	assert(NULL != key);
+    assert(NULL != set);
+    assert(NULL != key);
     assert(NULL != key_num);
-	
-    curr = set->head;	
+
+    curr = set->head;
     key_size = set->key_size;
-	
+
     if (set->type == COPY_POINTER) {
         tkey = key;
         key = &tkey;
@@ -372,20 +382,20 @@ bams_less(const BAMS * set, const void *key, size_t * key_num)
 }
 
 void *
-bams_equal(const BAMS * set, const void *key, size_t * key_num)
+bams_equal(const BAMS * set, const void *key, size_t *key_num)
 {
     SET_NODE *curr;
     size_t key_size;
     char *low, *high;
     char *r = NULL;
     size_t equal = 0;
-    void *tkey;
-    
-	assert(NULL != set);	
-	assert(NULL != key);
+    const void *tkey;
+
+    assert(NULL != set);
+    assert(NULL != key);
     assert(NULL != key_num);
 
-    curr = set->head;	
+    curr = set->head;
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
@@ -415,7 +425,7 @@ bams_equal(const BAMS * set, const void *key, size_t * key_num)
 }
 
 void *
-bams_great(const BAMS * set, const void *key, size_t * key_num)
+bams_great(const BAMS * set, const void *key, size_t *key_num)
 {
     SET_NODE *curr;
     size_t key_size;
@@ -423,13 +433,13 @@ bams_great(const BAMS * set, const void *key, size_t * key_num)
     char *r = NULL;
     char *t;
     size_t great = 0;
-    void *tkey;
+    const void *tkey;
 
-    assert(NULL != set);	
-	assert(NULL != key);
+    assert(NULL != set);
+    assert(NULL != key);
     assert(NULL != key_num);
 
-    curr = set->head;	
+    curr = set->head;
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
@@ -460,16 +470,16 @@ bams_great(const BAMS * set, const void *key, size_t * key_num)
 }
 
 void *
-bams_array(const BAMS * set, size_t * key_num)
+bams_array(const BAMS * set, size_t *key_num)
 {
     SET_NODE *curr;
     char *r = NULL;
     char *t;
-    
-	assert(NULL != set);
+
+    assert(NULL != set);
     assert(NULL != key_num);
-	
-    curr = set->head;	
+
+    curr = set->head;
     *key_num = 0;
     while (NULL != curr) {
         t = merge_into(r, *key_num, curr->keys, curr->length,
@@ -489,7 +499,7 @@ size_t
 bams_get_size(const BAMS * set)
 {
     assert(NULL != set);
-	
+
     return set->size;
 }
 
@@ -501,7 +511,7 @@ bams_clear(BAMS * set)
 
     assert(NULL != set);
 
-    curr = set->head;	
+    curr = set->head;
     while (NULL != curr) {
         next = curr->next;
         free(curr->keys);
@@ -520,7 +530,7 @@ bams_free(BAMS * set)
 
     assert(NULL != set);
 
-    curr = set->head;	
+    curr = set->head;
     while (NULL != curr) {
         next = curr->next;
         free(curr->keys);
@@ -539,11 +549,11 @@ bams_check_structure(const BAMS * set)
     size_t set_size = 0;
     size_t node_len = 0;
     size_t key_size;
-	
-	assert(NULL != set);
+
+    assert(NULL != set);
 
     curr = set->head;
-    key_size = set->key_size;	
+    key_size = set->key_size;
 
     while (NULL != curr) {
         if ((node_len >= curr->length) || (0 == curr->length)) {
@@ -589,9 +599,9 @@ bams_check_structure(const BAMS * set)
  */
 
 static SET_NODE *
-make_node(const BAMS * set, void *key)
+make_node(const BAMS * set, const void *key)
 {
-    SET_NODE *node = (SET_NODE *) malloc(sizeof(SET_NODE));
+    SET_NODE *node = (SET_NODE *) malloc(sizeof (SET_NODE));
     void *keys;
 
     if (!node) {
@@ -605,10 +615,10 @@ make_node(const BAMS * set, void *key)
     }
 
     switch (set->type) {
-    case COPY_DATA:
+      case COPY_DATA:
         memcpy(keys, key, set->key_size);
         break;
-    default:
+      default:
         *(void **) keys = key;
         break;
     }

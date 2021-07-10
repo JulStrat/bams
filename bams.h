@@ -116,7 +116,7 @@ extern "C" {
  *   
  *
  */
-    void *bams_less(const BAMS * set, const void *key, size_t * key_num);
+    void *bams_less(const BAMS * set, const void *key, size_t *key_num);
 
 /**
  * @brief Return array of keys equal to given.  
@@ -125,7 +125,7 @@ extern "C" {
  *   
  *
  */
-    void *bams_equal(const BAMS * set, const void *key, size_t * key_num);
+    void *bams_equal(const BAMS * set, const void *key, size_t *key_num);
 
 /**
  * @brief Return ordered array of keys great than given.  
@@ -134,7 +134,7 @@ extern "C" {
  *   
  *
  */
-    void *bams_great(const BAMS * set, const void *key, size_t * key_num);
+    void *bams_great(const BAMS * set, const void *key, size_t *key_num);
 
 
 /**
@@ -144,7 +144,7 @@ extern "C" {
  *   
  *
  */
-    void *bams_array(const BAMS * set, size_t * key_num);
+    void *bams_array(const BAMS * set, size_t *key_num);
 
 /**
  * @brief Returns number of keys.

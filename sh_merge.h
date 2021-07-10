@@ -17,19 +17,72 @@
  * SOFTWARE. 
  */
 
-/*
- * indent options: -orig -nut -nbc -di1 
+/**
+ * @file    sh_merge.h
+ * @brief   Merge two sorted arrays.
+ * @author  Ioulianos Kakoulidis
  */
+
+/*
+ * GNU indent program options: -orig -bad -bap -bs -cli2 -di1 -nbc -nut
+ */
+
+#ifndef SH_MERGE_H
+#define SH_MERGE_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
- * @file   merge.c
- * @brief  Merge two sorted arrays.
- * @author Ioulianos Kakoulidis
+ *
+ * @brief   Merge two sorted arrays.
+ *
+ * @param arr_a     First array
+ * @param num_el_a  Number of elements in array arr_a
+ * @param arr_b     Second array
+ * @param num_el_b  Number of elements in array arr_b
+ * @param el_size   Element size (in bytes)
+ * @param compare   Compare function
+ *
+ * @return Resulting array or NULL
+ *
  */
+    void *merge(const void *arr_a, size_t num_el_a,
+                const void *arr_b, size_t num_el_b,
+                size_t el_size, int (*compare) (const void *,
+                                                const void *));
 
+/**
+ *
+ * @brief   Merge two sorted arrays.
+ *          Reallocates dst array memory. Merge elements in reverse order.
+ *
+ * @param dst           Destination array
+ * @param num_el_dst    Number of elements in array dst
+ * @param src           Source array
+ * @param num_el_src    Number of elements in array src
+ * @param el_size       Element size (in bytes)
+ * @param compare       Compare function
+ *
+ * @return Resulting array or NULL
+ *
+ */
+    void *merge_into(void *dst, size_t num_el_dst,
+                     const void *src, size_t num_el_src,
+                     size_t el_size, int (*compare) (const void *,
+                                                     const void *));
+
+#ifdef __cplusplus
+}
+#endif
+#ifdef SH_MERGE_IMPLEMENTATION
 #include <stdlib.h>
 #include <string.h>
-
+#include <assert.h>
+#define ASSERT_MERGE_ARGS() \
+    assert(el_size != 0); \
+    assert(compare != NULL);
 void *
 merge(const void *arr_a, size_t num_el_a,
       const void *arr_b, size_t num_el_b,
@@ -42,8 +95,10 @@ merge(const void *arr_a, size_t num_el_a,
     char *r = NULL;
     char *rc = NULL;
 
+    ASSERT_MERGE_ARGS();
+
     r = (char *) malloc((num_el_a + num_el_b) * el_size);
-    if ((NULL == r) || (0 == (num_el_a + num_el_b) * el_size)) {
+    if (!r || !((num_el_a + num_el_b) * el_size)) {
         return NULL;
     }
     rc = r;
@@ -80,8 +135,10 @@ merge_into(void *dst, size_t num_el_dst,
     char *r = NULL;
     char *rc = NULL;
 
+    ASSERT_MERGE_ARGS();
+
     r = (char *) realloc(dst, (num_el_dst + num_el_src) * el_size);
-    if ((NULL == r) || (0 == (num_el_dst + num_el_src) * el_size)) {
+    if (!r || !((num_el_dst + num_el_src) * el_size)) {
         return NULL;
     }
     rc = r + (num_el_dst + num_el_src) * el_size;
@@ -106,3 +163,5 @@ merge_into(void *dst, size_t num_el_dst,
 
     return r;
 }
+#endif
+#endif

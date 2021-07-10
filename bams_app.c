@@ -11,6 +11,7 @@ cmp_int(const void *first, const void *second)
 {
     int a = *(int *) first;
     int b = *(int *) second;
+
     /*
      * printf("%d %d\n", a, b); 
      */
@@ -22,7 +23,8 @@ cmp_int(const void *first, const void *second)
 }
 
 #define ARR_SZ 1024 * 1024 - 1
-int arint[ARR_SZ] = { 0 };
+int arint[ARR_SZ] =
+{0};
 
 int
 main(int argc, char *argv[])
@@ -56,7 +58,7 @@ main(int argc, char *argv[])
         }
     }
 
-    bas = bams_create(sizeof(int), cmp_int);
+    bas = bams_create(sizeof (int), cmp_int);
 
     for (i = 0; i < ARR_SZ; i++) {
         bams_insert(bas, &arint[i]);
@@ -69,7 +71,7 @@ main(int argc, char *argv[])
             break;
         };
     }
-#endif    
+#endif
 
     a = arint[0];
     for (i = 0; i < ARR_SZ; i++) {

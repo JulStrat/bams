@@ -17,18 +17,68 @@
  * SOFTWARE. 
  */
 
-/*
- * indent options: -orig -nut -nbc -di1 
- */
-
 /**
- * @file    bisect.c
+ * @file    sh_bisect.h
  * @brief   Ordered array bisection algorithms.
  * @author  Ioulianos Kakoulidis
  */
 
-#include <stddef.h>
+/*
+ * GNU indent program options: -orig -bad -bap -bs -cli2 -di1 -nbc -nut
+ */
 
+#ifndef SH_BISECT_H
+#define SH_BISECT_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * @brief   Find position of the first element equal or great
+ *          than given key in sorted in ascending order array. 
+ *          If not found, return ``end'' of array.
+ *
+ * @param key       Bisection key
+ * @param arr       Array
+ * @param el_num    Elements number
+ * @param el_size   Element size
+ * @param compare   Compare function
+ *
+ */
+    void *bisect_left(const void *key, const void *arr,
+                      size_t el_num, size_t el_size,
+                      int (*compare) (const void *, const void *));
+
+/**
+ * @brief   Find position of the first element great
+ *          than given key in sorted in ascending order array. 
+ *          If not found, return ``end'' of array.
+ *
+ * @param key       Bisection key
+ * @param arr       Array
+ * @param el_num    Elements number
+ * @param el_size   Element size
+ * @param compare   Compare function
+ *
+ */
+    void *bisect_right(const void *key, const void *arr,
+                       size_t el_num, size_t el_size,
+                       int (*compare) (const void *, const void *));
+
+#ifdef __cplusplus
+}
+#endif
+#ifdef SH_BISECT_IMPLEMENTATION
+/*
+ * #include <stddef.h> 
+ */
+#include <assert.h>
+#define ASSERT_BISECT_ARGS() \
+    assert(key != NULL); \
+    assert(arr != NULL); \
+    assert(el_size != 0); \
+    assert(compare != NULL);
 void *
 bisect_left(const void *key, const void *arr,
             size_t el_num, size_t el_size,
@@ -38,6 +88,8 @@ bisect_left(const void *key, const void *arr,
     size_t high = el_num;
     size_t mid;
     char *off;
+
+    ASSERT_BISECT_ARGS();
 
     while (low < high) {
         mid = low + ((high - low) >> 1);
@@ -62,6 +114,8 @@ bisect_right(const void *key, const void *arr,
     size_t mid;
     char *off;
 
+    ASSERT_BISECT_ARGS();
+
     while (low < high) {
         mid = low + ((high - low) >> 1);
         off = (char *) arr + mid * el_size;
@@ -74,24 +128,5 @@ bisect_right(const void *key, const void *arr,
 
     return (char *) arr + low * el_size;
 }
-
-#if 0
-void *
-bin_search(const void *key, const void *arr,
-           size_t el_num, size_t el_size,
-           int (*compare) (const void *, const void *))
-{
-    char *off = (char *) bisect_left(key, arr, el_num, el_size, compare);
-
-    if ((off - (char *) arr) == el_num * el_size) {
-        /*
-         * At the ``end'' of array 
-         */
-        return NULL;
-    }
-    if ((*compare) (key, off) == 0) {
-        return off;
-    }
-    return NULL;
-}
+#endif
 #endif

@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "bisect.h"
+#define SH_BISECT_IMPLEMENTATION
+#include "sh_bisect.h"
 #include "greatest.h"
 
 int
@@ -18,7 +19,9 @@ cmp_int(const void *first, const void *second)
 }
 
 #define ARR_SZ 1024 * 1024 - 1
-int arint[ARR_SZ] = { 0 };
+int arint[ARR_SZ] =
+{0};
+
 #define TEST_NUM 64
 
 void *
@@ -69,11 +72,12 @@ do_bisect_left_test()
         arint[i] = rand();
     }
 
-    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
+    qsort(&arint[0], ARR_SZ, sizeof (int), cmp_int);
+
     for (i = 0; i < TEST_NUM; i++) {
         r = rand();
-        ASSERT_EQ(lfind_ge(&r, &arint[0], ARR_SZ, sizeof(int), cmp_int),
-                  bisect_left(&r, &arint[0], ARR_SZ, sizeof(int),
+        ASSERT_EQ(lfind_ge(&r, &arint[0], ARR_SZ, sizeof (int), cmp_int),
+                  bisect_left(&r, &arint[0], ARR_SZ, sizeof (int),
                               cmp_int));
     }
 
@@ -90,11 +94,12 @@ do_bisect_right_test()
         arint[i] = rand();
     }
 
-    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
+    qsort(&arint[0], ARR_SZ, sizeof (int), cmp_int);
+
     for (i = 0; i < TEST_NUM; i++) {
         r = rand();
-        ASSERT_EQ(lfind_gt(&r, &arint[0], ARR_SZ, sizeof(int), cmp_int),
-                  bisect_right(&r, &arint[0], ARR_SZ, sizeof(int),
+        ASSERT_EQ(lfind_gt(&r, &arint[0], ARR_SZ, sizeof (int), cmp_int),
+                  bisect_right(&r, &arint[0], ARR_SZ, sizeof (int),
                                cmp_int));
     }
 
@@ -110,31 +115,33 @@ do_bisect_min_max()
         for (j = 0; j < ARR_SZ; j++) {
             arint[j] = rand();
         }
-        qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
+        qsort(&arint[0], ARR_SZ, sizeof (int), cmp_int);
 
         /*
          * min 
          */
         ASSERT_EQ(lfind_gt
-                  (&arint[0], &arint[0], ARR_SZ, sizeof(int), cmp_int),
-                  bisect_right(&arint[0], &arint[0], ARR_SZ, sizeof(int),
+                  (&arint[0], &arint[0], ARR_SZ, sizeof (int), cmp_int),
+                  bisect_right(&arint[0], &arint[0], ARR_SZ, sizeof (int),
                                cmp_int));
+
         ASSERT_EQ(lfind_ge
-                  (&arint[0], &arint[0], ARR_SZ, sizeof(int), cmp_int),
-                  bisect_left(&arint[0], &arint[0], ARR_SZ, sizeof(int),
+                  (&arint[0], &arint[0], ARR_SZ, sizeof (int), cmp_int),
+                  bisect_left(&arint[0], &arint[0], ARR_SZ, sizeof (int),
                               cmp_int));
 
         /*
          * max 
          */
         ASSERT_EQ(lfind_gt
-                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof(int),
+                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof (int),
                    cmp_int), bisect_right(&arint[ARR_SZ - 1], &arint[0],
-                                          ARR_SZ, sizeof(int), cmp_int));
+                                          ARR_SZ, sizeof (int), cmp_int));
+
         ASSERT_EQ(lfind_ge
-                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof(int),
+                  (&arint[ARR_SZ - 1], &arint[0], ARR_SZ, sizeof (int),
                    cmp_int), bisect_left(&arint[ARR_SZ - 1], &arint[0],
-                                         ARR_SZ, sizeof(int), cmp_int));
+                                         ARR_SZ, sizeof (int), cmp_int));
     }
 
     PASS();

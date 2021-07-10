@@ -1,9 +1,11 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
+#define SH_MERGE_IMPLEMENTATION
+#include "sh_merge.h"
 #include "greatest.h"
-#include "merge.h"
 
 int
 cmp_int(const void *first, const void *second)
@@ -19,7 +21,9 @@ cmp_int(const void *first, const void *second)
 }
 
 #define ARR_SZ 30971
-int arint[ARR_SZ] = { 0 };
+int arint[ARR_SZ] =
+{0};
+
 #define TEST_NUM 128
 
 TEST
@@ -27,25 +31,26 @@ do_merge_test(int c)
 {
     size_t i;
     void *la, *ra, *r;
-    
+
     for (i = 0; i < ARR_SZ; i++) {
         arint[i] = rand();
     }
 
-    qsort(&arint[0], c, sizeof(int), cmp_int);
-    qsort(&arint[c], ARR_SZ - c, sizeof(int), cmp_int);
+    qsort(&arint[0], c, sizeof (int), cmp_int);
+    qsort(&arint[c], ARR_SZ - c, sizeof (int), cmp_int);
 
-    la = malloc(c * sizeof(int));
-    ra = malloc((ARR_SZ - c) * sizeof(int));
+    la = malloc(c * sizeof (int));
+    ra = malloc((ARR_SZ - c) * sizeof (int));
 
-    memcpy(la, &arint[0], c * sizeof(int));
-    memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof(int));
+    memcpy(la, &arint[0], c * sizeof (int));
+    memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof (int));
 
-    r = merge(la, c, ra, ARR_SZ - c, sizeof(int), cmp_int);
+    r = merge(la, c, ra, ARR_SZ - c, sizeof (int), cmp_int);
+
     ASSERT(r);
 
-    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
-    ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof(int));
+    qsort(&arint[0], ARR_SZ, sizeof (int), cmp_int);
+    ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof (int));
 
     free(la);
     free(ra);
@@ -59,25 +64,26 @@ do_merge_into_test(int c)
 {
     size_t i;
     void *la, *ra, *r;
-    
+
     for (i = 0; i < ARR_SZ; i++) {
         arint[i] = rand();
     }
 
-    qsort(&arint[0], c, sizeof(int), cmp_int);
-    qsort(&arint[c], ARR_SZ - c, sizeof(int), cmp_int);
-	
-    la = malloc(c * sizeof(int));
-    ra = malloc((ARR_SZ - c) * sizeof(int));
+    qsort(&arint[0], c, sizeof (int), cmp_int);
+    qsort(&arint[c], ARR_SZ - c, sizeof (int), cmp_int);
 
-    memcpy(la, &arint[0], c * sizeof(int));
-    memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof(int));
+    la = malloc(c * sizeof (int));
+    ra = malloc((ARR_SZ - c) * sizeof (int));
 
-    r = merge_into(la, c, ra, ARR_SZ - c, sizeof(int), cmp_int);
+    memcpy(la, &arint[0], c * sizeof (int));
+    memcpy(ra, &arint[c], (ARR_SZ - c) * sizeof (int));
+
+    r = merge_into(la, c, ra, ARR_SZ - c, sizeof (int), cmp_int);
+
     ASSERT(r);
 
-    qsort(&arint[0], ARR_SZ, sizeof(int), cmp_int);
-    ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof(int));
+    qsort(&arint[0], ARR_SZ, sizeof (int), cmp_int);
+    ASSERT_MEM_EQ(&arint[0], r, ARR_SZ * sizeof (int));
 
     free(ra);
     free(r);
@@ -88,11 +94,12 @@ do_merge_into_test(int c)
 SUITE(merge_suite)
 {
     int i;
-	int c;
+    int c;
 
     for (i = 0; i < TEST_NUM; i++) {
-		c = (rand() % ARR_SZ);
-		if ((c < 0) || (c > ARR_SZ)) continue;
+        c = (rand() % ARR_SZ);
+        if ((c < 0) || (c > ARR_SZ))
+            continue;
         RUN_TEST1(do_merge_test, c);
     }
 
@@ -103,11 +110,12 @@ SUITE(merge_suite)
 SUITE(merge_into_suite)
 {
     int i;
-	int c;
-	
+    int c;
+
     for (i = 0; i < TEST_NUM; i++) {
-		c = (rand() % ARR_SZ);
-		if ((c < 0) || (c > ARR_SZ)) continue;
+        c = (rand() % ARR_SZ);
+        if ((c < 0) || (c > ARR_SZ))
+            continue;
         RUN_TEST1(do_merge_into_test, c);
     }
 
@@ -127,7 +135,7 @@ main(int argc, char *argv[])
     srand(time(NULL));
 
     RUN_SUITE(merge_suite);
-    RUN_SUITE(merge_into_suite);	
+    RUN_SUITE(merge_into_suite);
 
     GREATEST_MAIN_END();
 }
