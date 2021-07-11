@@ -8,7 +8,7 @@ One of my favorite data structures,
 described in [Introduction to Algorithms](https://en.wikipedia.org/wiki/Introduction_to_Algorithms), 
 chapter 17 "Amortized Analysis", problem 17-2 "Making binary search dynamic".
 
-Internally bams implemented as linked list of sorted an ascending order arrays of data or pointers.
+Internally ```bams``` implemented as linked list of sorted in ascending order arrays of data or pointers.
 
 Name BAS - "binary array set" and Java, Python, C++, Rust implementations 
 was made by [Nayuki](https://www.nayuki.io/page/binary-array-set).
@@ -24,9 +24,9 @@ BAMS * bams_create(size_t key_size,
 
 int bams_insert(BAMS *set, const void *key);
 
-void * bams_min(const BAMS *set);
+const void * bams_min(const BAMS *set);
 
-void * bams_max(const BAMS *set);
+const void * bams_max(const BAMS *set);
 
 void * bams_array(const BAMS *set, size_t *key_num);
 

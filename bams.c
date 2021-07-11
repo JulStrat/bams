@@ -104,9 +104,9 @@ int
 bams_insert(BAMS * set, const void *key)
 {
     SET_NODE *curr;
-    void *keys;
+    /** void *keys; */
     void *t;
-    size_t length = 1;
+    /** size_t length = 1; */
     SET_NODE *node;
     SET_NODE *next;
 
@@ -155,7 +155,7 @@ bams_insert(BAMS * set, const void *key)
     return 1;
 }
 
-void *
+const void *
 bams_min(const BAMS * set)
 {
     SET_NODE *curr;
@@ -180,14 +180,11 @@ bams_min(const BAMS * set)
     if (set->type == COPY_POINTER) {
         return *(void **) min_key;
     } else {
-        /*
-         * TO DO - Make key copy !? 
-         */
         return min_key;
     }
 }
 
-void *
+const void *
 bams_max(const BAMS * set)
 {
     SET_NODE *curr;
@@ -217,9 +214,6 @@ bams_max(const BAMS * set)
     if (set->type == COPY_POINTER) {
         return *(void **) max_key;
     } else {
-        /*
-         * TO DO - Make key copy !? 
-         */
         return max_key;
     }
 }

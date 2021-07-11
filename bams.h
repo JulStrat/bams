@@ -63,7 +63,7 @@ extern "C" {
  * @return min such that compare(min, key) <= 0 for any key from the set
  *         if set is empty - return NULL  
  */
-    void *bams_min(const BAMS * set);
+    const void *bams_min(const BAMS * set);
 
 /**
  * @brief Return maximum key of the set.
@@ -71,7 +71,7 @@ extern "C" {
  * @return max such that compare(max, key) >= 0 for any key from the set
  *         if set is empty - return NULL  
  */
-    void *bams_max(const BAMS * set);
+    const void *bams_max(const BAMS * set);
 
 /**
  * @brief Count number of keys less than given.  
