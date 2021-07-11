@@ -130,7 +130,7 @@ main(int argc, char *argv[])
     }
     free(all_keys);
 
-    printf("Set size: %lu\n", bams_get_size(bas));
+    printf("Set size: %lu\n", bams_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
     bams_free(bas);
 
@@ -140,7 +140,7 @@ main(int argc, char *argv[])
     /*
      * bas = bams_create(sizeof (int), cmp_int); for (i = 0; i < 1024 *
      * 1024 * 32; i++) { a = rand(); bams_insert(bas, &a); } printf("Set
-     * size: %lu\n", bams_get_size(bas)); printf("Check structure result:
+     * size: %lu\n", bams_size(bas)); printf("Check structure result:
      * %d\n", bams_check_structure(bas)); bams_free(bas); 
      */
     return 0;

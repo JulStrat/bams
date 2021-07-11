@@ -70,6 +70,10 @@ struct _BAMS {
 
 static SET_NODE *make_node(const BAMS * set, const void *key);
 
+#define POINTER_ADDR(p, a) \
+    a = p; \
+    p = &a;
+     
 BAMS *
 bams_create(size_t key_size, int (*compare) (const void *, const void *))
 {
@@ -87,7 +91,6 @@ bams_create(size_t key_size, int (*compare) (const void *, const void *))
         set->type = COPY_DATA;
     } else {
         set->key_size = sizeof (void *);
-
         set->type = COPY_POINTER;
     }
     set->compare = compare;
@@ -96,26 +99,6 @@ bams_create(size_t key_size, int (*compare) (const void *, const void *))
 
     return set;
 }
-
-#if 0
-int
-bams_contains(const BAMS * set, const void *key)
-{
-    SET_NODE *curr = set->head;
-    void *key_pos;
-
-    while (NULL != curr) {
-        key_pos = bin_search(key, curr->keys, curr->length,
-                             set->key_size, set->compare);
-        if (NULL != key_pos) {
-            return 1;
-        }
-        curr = curr->next;
-    }
-
-    return 0;
-}
-#endif
 
 int
 bams_insert(BAMS * set, const void *key)
@@ -257,8 +240,7 @@ bams_count_less(const BAMS * set, const void *key)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     while (NULL != curr) {
@@ -288,8 +270,7 @@ bams_count_equal(const BAMS * set, const void *key)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     while (NULL != curr) {
@@ -321,8 +302,7 @@ bams_count_great(const BAMS * set, const void *key)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     while (NULL != curr) {
@@ -356,8 +336,7 @@ bams_less(const BAMS * set, const void *key, size_t *key_num)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     *key_num = 0;
@@ -399,8 +378,7 @@ bams_equal(const BAMS * set, const void *key, size_t *key_num)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     *key_num = 0;
@@ -443,8 +421,7 @@ bams_great(const BAMS * set, const void *key, size_t *key_num)
     key_size = set->key_size;
 
     if (set->type == COPY_POINTER) {
-        tkey = key;
-        key = &tkey;
+        POINTER_ADDR(key, tkey);
     }
 
     *key_num = 0;
@@ -496,7 +473,7 @@ bams_array(const BAMS * set, size_t *key_num)
 }
 
 size_t
-bams_get_size(const BAMS * set)
+bams_size(const BAMS * set)
 {
     assert(NULL != set);
 
@@ -603,6 +580,7 @@ make_node(const BAMS * set, const void *key)
 {
     SET_NODE *node = (SET_NODE *) malloc(sizeof (SET_NODE));
     void *keys;
+    const void *tkey;	
 
     if (!node) {
         return NULL;
@@ -614,6 +592,11 @@ make_node(const BAMS * set, const void *key)
         return NULL;
     }
 
+    if (set->type == COPY_POINTER) {
+        POINTER_ADDR(key, tkey);
+    }
+
+/*
     switch (set->type) {
       case COPY_DATA:
         memcpy(keys, key, set->key_size);
@@ -622,6 +605,9 @@ make_node(const BAMS * set, const void *key)
         *(void **) keys = key;
         break;
     }
+*/	
+	memcpy(keys, key, set->key_size);
+	
     node->keys = keys;
     node->length = 1;
 

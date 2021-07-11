@@ -37,7 +37,7 @@ main(int argc, char *argv[])
 
     free(keys);
 
-    printf("Set size: %lu\n", bams_get_size(bas));
+    printf("Set size: %lu\n", bams_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
 
     bams_clear(bas);
@@ -54,7 +54,7 @@ main(int argc, char *argv[])
 
     free(keys);
 
-    printf("Set size: %lu\n", bams_get_size(bas));
+    printf("Set size: %lu\n", bams_size(bas));
     printf("Check structure result: %d\n", bams_check_structure(bas));
 
     bams_free(bas);

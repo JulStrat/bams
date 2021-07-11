@@ -45,7 +45,7 @@ main(int argc, char *argv[])
     gt_keys = bams_great(bas, "obelisk", &gt_num);
     assert(gt_num == bams_count_great(bas, "obelisk"));
 
-    assert(bams_get_size(bas) == (lt_num + eq_num + gt_num));
+    assert(bams_size(bas) == (lt_num + eq_num + gt_num));
 
     for (i = 0; i < lt_num; i++) {
         printf("%s", lt_keys[i]);
@@ -81,7 +81,7 @@ main(int argc, char *argv[])
      */
 
     /*
-     * printf("Set size: %lu\n", bams_get_size(bas)); printf("Check structure 
+     * printf("Set size: %lu\n", bams_size(bas)); printf("Check structure 
      * result: %d\n", bams_check_structure(bas)); 
      */
 
